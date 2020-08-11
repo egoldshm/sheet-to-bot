@@ -22,14 +22,16 @@ from file_reader.getAdmins import getAdmins
 from reporters.save_unique_in_file import Save_unique_in_file
 
 
-def report_to_channel(bot, message, text, user) :
+def report_to_channel(bot, message, text, user, node) :
     try :
-        bot.IsendMessage(CHANNEL_ID, """*משתמש:*
+        bot.IsendMessage(CHANNEL_ID, """משתמש:
         {}
-        *הודעה 💬:*
+        הודעה 💬:
         {}
-        *תשובה 🗨:*
-        {}""".format(user, text, message),mark_down=False)
+        תשובה 🗨:
+        {}
+        צומת 🌴:
+        {}""".format(user, text, message, node),mark_down=False)
     except :
         print("Not find channel")
 
@@ -97,7 +99,7 @@ class Telegram_menu_bot :
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
 
-            report_to_channel(bot, message_to_report, text, user)
+            report_to_channel(bot, message_to_report, text, user, str(current_node))
             self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report)
 
             self.registered_users.add_name(str(user.id))
@@ -126,7 +128,7 @@ class Telegram_menu_bot :
             else :
                 bot.IsendMessage(chat_id, message, keyboard=keyboard, mark_down=response.mark_down,
                                  disable_web_preview=not response.link_preview)
-            message_to_report += "|".format(message)
+            message_to_report += "| {}".format(message)
         return message_to_report
 
     def admin_menu(self, bot, chat_id: int, text: str, user: User.User) :
