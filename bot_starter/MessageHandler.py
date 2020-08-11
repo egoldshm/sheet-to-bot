@@ -51,11 +51,12 @@ class Telegram_menu_bot :
     def messageHandler(self, chat_id, bot, user: User, text) -> str :
         try :
             if text in MENU_LIST:
-                ROWS = 50
+                ROWS = 200
                 message_to_send = str(self.tree)
                 list_to_send = message_to_send.split("\n")
-                for i in range(0, int(len(list_to_send)/ROWS)):
+                for i in range(0, int(len(list_to_send)/ROWS) + 1) :
                     bot.IsendMessage(chat_id, "\n".join(list_to_send[i*ROWS:min((i+1)*ROWS,len(list_to_send))]))
+                self.report(bot, self.users_mode[user.id], "<התפריט נשלח>", text, user)
                 return "MENU"
 
             keyboard = None
