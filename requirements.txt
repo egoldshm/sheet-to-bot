@@ -1,0 +1,11 @@
+graphviz
+urllib3
+flask
+telepot
+telebot
+telegram
+python-telegram-bot
+pyTelegramBotAPI
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

@@ -1,0 +1,1 @@
+PYTHONANYWHERE_NAME = "aguda"
