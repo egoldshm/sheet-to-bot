@@ -49,7 +49,7 @@ class Telegram_menu_bot :
     def messageHandler(self, chat_id, bot, user: User, text) -> str :
         try :
             if text in MENU_LIST :
-                bot.IsendMessage(chat_id, self.tree)
+                bot.IsendMessage(chat_id, str(self.tree))
                 return "MENU"
 
             keyboard = None
