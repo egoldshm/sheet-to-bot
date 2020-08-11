@@ -41,4 +41,4 @@ class CommandNode(Node):
         return """שם: {}
         אבא: {}
         מקלדת: {}
-        """.format(self.name, self.parent, self.keyboard)
+        """.format(self.name, self.parent.name, self.keyboard)
