@@ -48,8 +48,11 @@ class Telegram_menu_bot :
 
     def messageHandler(self, chat_id, bot, user: User, text) -> str :
         try :
-            if text in MENU_LIST :
-                bot.IsendMessage(chat_id, str(self.tree))
+            if text in MENU_LIST:
+                message_to_send = str(self.tree)
+                list_to_send = message_to_send.split("\n")
+                for i in range(0, int(len(list_to_send)/50)):
+                    bot.IsendMessage(chat_id, "\n".join(list_to_send[i*50:max((i+1)*50,len(list_to_send))]))
                 return "MENU"
 
             keyboard = None
