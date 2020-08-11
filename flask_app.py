@@ -10,8 +10,7 @@ from typing import List, Tuple
 import telepot
 import urllib3
 from flask import Flask, request
-from telebot.types import InlineKeyboardButton
-from telepot.namedtuple import ReplyKeyboardMarkup, InlineKeyboardMarkup
+from telepot.namedtuple import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 
 from Configurations.bot_token_conf import TOKEN
 from Configurations.pythonanywhere_conf import PYTHONANYWHERE_NAME
