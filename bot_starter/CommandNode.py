@@ -36,3 +36,9 @@ class CommandNode(Node):
                 if item == sub_command.name:
                     return sub_command
         return None
+
+    def __str__(self):
+        return """שם: {}
+        אבא: {}
+        מקלדת: {}
+        """.format(self.name, self.parent, self.keyboard)
