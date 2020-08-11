@@ -51,7 +51,7 @@ class Telegram_menu_bot :
     def messageHandler(self, chat_id, bot, user: User, text) -> str :
         try :
             if text in MENU_LIST:
-                ROWS = 5
+                ROWS = 50
                 message_to_send = str(self.tree)
                 list_to_send = message_to_send.split("\n")
                 for i in range(0, int(len(list_to_send)/ROWS)):
