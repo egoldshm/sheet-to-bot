@@ -147,6 +147,7 @@ class Telegram_menu_bot :
                 for user_id in self.users_mode.keys() :
                     if self.users_mode[user_id].name == "/start" :
                         self.users_mode[user_id] = self.tree.start_node
+                    self.users_mode[user.id] = self.tree.start_node
                 message = "התפריט אופס בהצלחה! 👌 "
 
             elif SEND_MESSAGE_TO_ALL in text :
