@@ -123,16 +123,15 @@ class Telegram_menu_bot :
             message = user.replace_in_message(message)
             if response.message_type == "photo" :
                 photo_id = response.data_id
-                bot.IsendPhoto(chat_id, photo_id, message, keyboard=keyboard, mark_down=response.mark_down)
+                bot.IsendPhoto(chat_id, photo_id, message, keyboard=keyboard, inline_keyboard=response.inline_keyboard, mark_down=response.mark_down)
             elif response.message_type == "file" :
                 file_id = response.data_id
-                bot.IsendFile(chat_id, file_id, message, keyboard=keyboard, mark_down=response.mark_down)
+                bot.IsendFile(chat_id, file_id, message, keyboard=keyboard, inline_keyboard=response.inline_keyboard, mark_down=response.mark_down)
             elif response.message_type == "sticker" :
                 file_id = response.data_id
                 bot.IsendSticker(chat_id, file_id, message)
-
             else :
-                bot.IsendMessage(chat_id, message, keyboard=keyboard, mark_down=response.mark_down,
+                bot.IsendMessage(chat_id, message, keyboard=keyboard, inline_keyboard=response.inline_keyboard, mark_down=response.mark_down,
                                  disable_web_preview=not response.link_preview)
             message_to_report += "| {}".format(message)
         return message_to_report

@@ -38,6 +38,25 @@ def create_response(res: Dict) -> Response :
     else :
         r = Response(res["answer"], link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE", is_contact=res["is_contact"] == "TRUE")
+    inline_keyboard: str = res["inline_keyboard"]
+    result_inline_keyboard = []
+    if inline_keyboard != "":
+        try:
+            list_of_rows = inline_keyboard.split("\n")
+            for row in list_of_rows:
+                list_of_items = row.split("|")
+                result_for_line = []
+                for item in list_of_items:
+                    text = item.split("-")[0].strip()
+                    # todo: add check to format and url
+                    url = item.split("-")[1].strip()
+                    result_for_line.append((text, url))
+                result_inline_keyboard.append(result_for_line)
+            r.inline_keyboard = result_inline_keyboard
+        except:
+            print("problem with parse inline keyboard - " + inline_keyboard)
+            print("result: " + str(result_inline_keyboard) + " | " + str(result_for_line))
+    print(r)
     return r
 
 

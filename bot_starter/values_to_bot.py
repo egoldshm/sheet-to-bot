@@ -13,7 +13,7 @@ from Configurations.spreadsheet_id_conf import SPREADSHEET_ID
 from bot_starter.botMenu import BotMenu
 from file_reader.google_spreadsheep_reader import google_spreadsheet_reader
 
-file_column = ["name", "type", "father_menu", "answer", "row", "column", "is_contact","disable_markdown","disable_web_page_preview", "back_to_main"]
+file_column = ["name", "type", "father_menu", "answer", "row", "column", "is_contact","disable_markdown","disable_web_page_preview", "back_to_main", "inline_keyboard"]
 
 
 def list_to_dict(row):

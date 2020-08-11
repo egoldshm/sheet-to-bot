@@ -4,6 +4,7 @@
 #                       Eytan Goldshmidt                         #
 #                     eitntt@gmail.com                           #
 ##################################################################
+from typing import List, Tuple
 
 
 class Response:
@@ -12,8 +13,10 @@ class Response:
     mark_down: bool
     message_type: str
     data_id: str
+    inline_keyboard: List[List[Tuple[str, str]]]
 
-    def __init__(self, text:str, link_preview=True, mark_down=True, message_type="text", is_contact = False,  data_id=""):
+    def __init__(self, text:str, link_preview=True, mark_down=True, message_type="text", is_contact = False,  data_id="", inline_keyboard: List[List[Tuple[str, str]]] = None):
+        self.inline_keyboard = inline_keyboard
         self.link_preview = link_preview
         self.mark_down = mark_down
         self.message_type = message_type
@@ -22,5 +25,5 @@ class Response:
         self.text = text
 
     def __str__(self) -> str:
-        return "{} ({}, {}) {}".format(self.text, self.link_preview, self.mark_down,
-                                       "" if self.message_type == "text" else self.message_type + "(" + self.data_id + ")")
+        return "{} ({}, {}) {} inline: {}".format(self.text, self.link_preview, self.mark_down,
+                                       "" if self.message_type == "text" else self.message_type + "(" + self.data_id + ")", self.inline_keyboard)
