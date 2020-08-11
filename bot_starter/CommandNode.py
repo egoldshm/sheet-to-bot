@@ -39,6 +39,6 @@ class CommandNode(Node):
 
     def __str__(self):
         return """שם: {}
-        אבא: {}
         מקלדת: {}
-        """.format(self.name, self.parent.name, self.keyboard)
+        """.format(self.name if not self.parent else self.name + """
+        אבא:{}""".format(self.parent.name), self.keyboard)
