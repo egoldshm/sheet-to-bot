@@ -71,6 +71,7 @@ class Telegram_menu_bot :
                 self.users_mode[user.id] = self.tree.start_node
                 message = RETURN_MESSAGE
                 bot.IsendMessage(chat_id, message, keyboard=keyboard)
+                self.report(bot, self.tree.start_node, message, text, user)
                 return "BACK"
 
             elif text == RETURN_ONE_ASK :
@@ -78,6 +79,7 @@ class Telegram_menu_bot :
                 keyboard = self.users_mode[user.id].keyboard
                 message = RETURN_ONE_MESSAGE
                 bot.IsendMessage(chat_id, message, keyboard=keyboard)
+                self.report(bot, self.users_mode[user.id], message, text, user)
                 return "BACK"
 
             current_node = self.users_mode[user.id]
@@ -100,16 +102,18 @@ class Telegram_menu_bot :
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
 
-            report_to_channel(bot, message_to_report, text, user, str(current_node))
-            self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report)
-
-            self.registered_users.add_name(str(user.id))
+            self.report(bot, current_node, message_to_report, text, user)
 
             return "Done"
         except Exception as ex :
             print(bot, user, text)
             print("ERROR (in messageHandler): " + str(ex))
             return "ERROR"
+
+    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User) :
+        report_to_channel(bot, message_to_report, text, user, str(current_node))
+        self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report)
+        self.registered_users.add_name(str(user.id))
 
     def send_response(self, bot, chat_id, responses: List[Response], keyboard=None, user=User.User()) :
         message_to_report = ""
