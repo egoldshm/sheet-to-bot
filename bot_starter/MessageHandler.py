@@ -7,6 +7,8 @@
 
 
 import json
+import linecache
+import sys
 from typing import List, Dict
 
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
@@ -51,7 +53,7 @@ class Telegram_menu_bot :
     def messageHandler(self, chat_id, bot, user: User, text) -> str :
         try :
             if text in MENU_LIST:
-                ROWS = 200
+                ROWS = 100
                 message_to_send = str(self.tree)
                 list_to_send = message_to_send.split("\n")
                 for i in range(0, int(len(list_to_send)/ROWS) + 1) :
@@ -108,7 +110,13 @@ class Telegram_menu_bot :
             return "Done"
         except Exception as ex :
             print(bot, user, text)
-            print("ERROR (in messageHandler): " + str(ex))
+            exc_type, exc_obj, tb = sys.exc_info()
+            f = tb.tb_frame
+            lineno = tb.tb_lineno
+            filename = f.f_code.co_filename
+            linecache.checkcache(filename)
+            line = linecache.getline(filename, lineno, f.f_globals)
+            print('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
             return "ERROR"
 
     def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User) :
