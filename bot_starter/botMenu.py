@@ -56,7 +56,6 @@ def create_response(res: Dict) -> Response :
         except:
             print("problem with parse inline keyboard - " + inline_keyboard)
             print("result: " + str(result_inline_keyboard) + " | " + str(result_for_line))
-    print(r)
     return r
 
 
