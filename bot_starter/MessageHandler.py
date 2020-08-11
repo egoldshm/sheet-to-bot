@@ -165,7 +165,7 @@ class Telegram_menu_bot :
 
             elif SEND_TO_USER in text :
                 text_to_send = text.replace(SEND_TO_USER, "")
-                list_of_message = text.split("\n")
+                list_of_message = text_to_send.split("\n")
                 user_id = list_of_message[0]
                 if not user_id.isdigit() :
                     return False
