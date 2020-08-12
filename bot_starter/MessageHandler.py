@@ -86,7 +86,8 @@ class Telegram_menu_bot :
                 else:
                     for admin in self.admins:
                         bot.IsendMessage(admin, """*משוב עבור:* "{}"
-                        מאת: {}""".format(self.users_mode[user.id], user))
+                        *מאת:*
+                        {}""".format(self.users_mode[user.id].name, user))
                         bot.Iforward_message(admin, chat_id, message_id)
                     bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM ,keyboard=[[DONE_FORM_MESSAGE]])
                 self.report(bot, self.users_mode[user.id],"", text, user)
