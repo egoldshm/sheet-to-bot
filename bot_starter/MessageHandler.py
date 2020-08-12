@@ -170,6 +170,7 @@ class Telegram_menu_bot :
     def admin_menu(self, bot, chat_id: int, text: str, user: User.User, message_id) :
         # admin menu:
         if user.id in self.tree.admins :
+            mark_down = True
 
             # forward message to all
             if FORWARD_TO_ALL == text :
@@ -205,6 +206,7 @@ class Telegram_menu_bot :
 
             if text[0] == '{' and not self.users_mode[user.id].form :
                 message = json.dumps(text, indent=1)
+                mark_down = False
 
             elif text in ("/admin", "admin","מנהלים", "תפריט ניהול"):
                 message = """*מה אתה בתור מנהל יכול לעשות?*
@@ -268,6 +270,6 @@ class Telegram_menu_bot :
                     self.report(bot, self.users_mode[user.id], "", text, user)
                     return True
                 return False
-            bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=False)
+            bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user)
             return True
