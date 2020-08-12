@@ -23,7 +23,8 @@ class CommandNode(Node):
         self.keyboard = keyboard
 
     def set_responses(self, responses:List[Response]):
-        self.form = self.name if any(map(lambda i: i.message_type == "form", responses)) else ""
+        if responses:
+            self.form = self.name if any(map(lambda i: i.message_type == "form", responses)) else ""
         self.responses = responses
 
     def __contains__(self, item: str):
