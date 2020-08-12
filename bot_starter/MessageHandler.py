@@ -14,7 +14,7 @@ from typing import List, Dict
 from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
-    DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM
+    DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
@@ -50,13 +50,13 @@ class Telegram_menu_bot :
         self.file_reporter = Report_to_file(FILENAME_report)
 
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None) -> str :
-        try:
+        try :
             if text in MENU_LIST :
                 self.send_menu(bot, chat_id, text, user)
                 return "MENU"
 
             keyboard = None
-            if self.admin_menu(bot, chat_id, text, user) :
+            if self.admin_menu(bot, chat_id, text, user, message_id) :
                 return "ADMIN_MENU"
 
             # new user
@@ -64,37 +64,38 @@ class Telegram_menu_bot :
                 self.users_mode[user.id] = self.tree.start_node
 
             # return message
-            if text in (RETURN_MENU_MESSAGE, RETURN_ONE_ASK):
+            if text in (RETURN_MENU_MESSAGE, RETURN_ONE_ASK) :
                 if text == RETURN_MENU_MESSAGE :
                     keyboard = self.tree.start_node.keyboard
                     self.users_mode[user.id] = self.tree.start_node
                 elif text == RETURN_ONE_ASK :
-                    self.users_mode[user.id] = self.users_mode[user.id].parent if self.users_mode[user.id].parent else self.tree.start_node
+                    self.users_mode[user.id] = self.users_mode[user.id].parent if self.users_mode[
+                        user.id].parent else self.tree.start_node
                     keyboard = self.users_mode[user.id].keyboard
                 message = RETURN_MENU_MESSAGE
                 bot.IsendMessage(chat_id, message, keyboard=keyboard)
                 self.report(bot, self.users_mode[user.id], message, text, user)
                 return "BACK"
 
-            if self.users_mode[user.id].form:
-                if text == DONE_FORM_MESSAGE:
+            if self.users_mode[user.id].form :
+                if text == DONE_FORM_MESSAGE :
                     self.users_mode[user.id] = self.tree.start_node
                     message = RETURN_MENU_MESSAGE
                     bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard)
-                else:
-                    for admin in self.tree.admins:
+                else :
+                    for admin in self.tree.admins :
                         bot.IsendMessage(admin, """*משוב עבור:* "{}"
                         *מאת:*
                         {}""".format(self.users_mode[user.id].name, user))
                         bot.Iforward_message(admin, chat_id, message_id)
-                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM ,keyboard=[[DONE_FORM_MESSAGE]])
-                self.report(bot, self.users_mode[user.id],"", text, user)
+                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM, keyboard=[[DONE_FORM_MESSAGE]])
+                self.report(bot, self.users_mode[user.id], "", text, user)
                 return "FORM"
 
             current_node = self.users_mode[user.id]
 
             # if we got /start -> back to main
-            if text == self.tree.start_node.name:
+            if text == self.tree.start_node.name :
                 self.users_mode[user.id] = self.tree.start_node
                 current_node = self.users_mode[user.id]
                 keyboard = current_node.keyboard
@@ -106,8 +107,8 @@ class Telegram_menu_bot :
             if text in current_node :
                 new_node = current_node[text]
                 keyboard = new_node.keyboard
-                if new_node.children or new_node.form:
-                    if new_node.form:
+                if new_node.children or new_node.form :
+                    if new_node.form :
                         keyboard = [[DONE_FORM_MESSAGE]]
                     self.users_mode[user.id] = new_node
 
@@ -162,11 +163,43 @@ class Telegram_menu_bot :
             message_to_report += "| {}".format(message)
         return message_to_report
 
-    def admin_menu(self, bot, chat_id: int, text: str, user: User.User) :
+    def admin_menu(self, bot, chat_id: int, text: str, user: User.User, message_id) :
         # admin menu:
         if user.id in self.tree.admins :
-            if text[0] == '{' and not self.users_mode[user.id].form:
+
+            # forward message to all
+            if FORWARD_TO_ALL == text :
+                self.users_mode[user.id] = FORWARD_TO_ALL
+                self.messages_to_forward = []
+                bot.IsendMessage(chat_id, RESPONSE_TO_FORWARD_TO_ALL,
+                                 keyboard=[[FORWARD_TO_ALL], [SEND_ONLY_TO_ME], [CANCEL]])
+            if self.users_mode[user.id] == FORWARD_TO_ALL :
+                if text == SEND_ONLY_TO_ME :
+                    for i in self.messages_to_forward :
+                        bot.Iforward_message(chat_id, chat_id, i)
+                    bot.IsendMessage(chat_id, "הועברו בהצלחה {} הודעות".format(len(self.messages_to_forward)))
+                elif text in (CANCEL, RETURN_MENU_MESSAGE, RETURN_ONE_ASK, RESET_MESSAGE) :
+                    bot.IsendMessage(chat_id, "בוטל.", keyboard=self.tree.start_node.keyboard)
+                elif text == FORWARD_TO_ALL :
+                    count = 0
+                    for user_id in self.registered_users.data :
+                        try :
+                            for i in self.messages_to_forward :
+                                bot.Iforward_message(user_id, chat_id, i)
+                            count += 1
+                        except :
+                            pass
+                    bot.IsendMessage(chat_id,
+                                     "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count))
+                else :
+                    self.messages_to_forward.append(message_id)
+                self.report(bot, "<מצב העברה>", "<ההודעה בהתאמה>", text, user)
+                return True
+
+            if text[0] == '{' and not self.users_mode[user.id].form :
                 message = json.dumps(text, indent=1)
+
+
 
             # reset the commands in the bot
             elif text == RESET_MESSAGE :
@@ -176,7 +209,6 @@ class Telegram_menu_bot :
                         self.users_mode[user_id] = self.tree.start_node
                     self.users_mode[user.id] = self.tree.start_node
                 message = "התפריט אופס בהצלחה! 👌 "
-
 
             # send message to all
             elif SEND_MESSAGE_TO_ALL in text :
@@ -209,13 +241,13 @@ class Telegram_menu_bot :
                 responses = None
                 if text_to_send in self.tree.botMenu.global_commands :
                     responses = self.tree.botMenu.global_commands[text_to_send]
-                try:
-                    if responses:
+                try :
+                    if responses :
                         self.send_response(bot, user_id, responses)
                     else :
                         bot.IsendMessage(user_id, text_to_send)
                     message = "ההודעה נשלחה בהצלחה ל{}".format(user_id)
-                except:
+                except :
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
                 return False

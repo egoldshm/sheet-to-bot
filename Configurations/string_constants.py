@@ -18,3 +18,8 @@ RESET_MESSAGE = "/reset"
 
 DONE_FORM_MESSAGE = "סיימתי 👍"
 RECEIVED_MESSAGE_FORM = "קיבלתי את ההודעה 👍📢 מוזמן לסיים על ידי לחיצה על הכפתור למטה - או לשלוח לי עוד הודעות 😉"
+
+FORWARD_TO_ALL = "העבר לכולם"
+SEND_ONLY_TO_ME = "שלח לי 😊"
+CANCEL = "ביטול ❌"
+RESPONSE_TO_FORWARD_TO_ALL = "אחלה, עכשיו שלח את ההודעות. ולסיום לחץ על 'שלח' או על 'בדיקה'"
