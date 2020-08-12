@@ -14,12 +14,15 @@ from bot_starter.values_to_bot import data_to_bot
 
 from anytree import RenderTree
 
+from file_reader.getAdmins import getAdmins
+
 
 class generate_commands_tree(data_to_bot) :
     start_node: CommandNode
 
     def __init__(self) :
         super().__init__()
+        self.admins = getAdmins()
         self.start_node = CommandNode()
         self.create_sub_commands(self.start_node)
 

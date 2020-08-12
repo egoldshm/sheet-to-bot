@@ -11,17 +11,16 @@
 import json
 from typing import List, Dict
 
+from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
     DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM
 from bot_starter import User
-from Configurations.bot_token_conf import CHANNEL_ID
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
-from reporters.ReportFile import Report_to_file
-from bot_starter.botMenu import RETURN_MENU_MESSAGE, RETURN_MESSAGE, RETURN_ONE_ASK, RETURN_ONE_MESSAGE
+from bot_starter.botMenu import RETURN_MENU_MESSAGE, RETURN_ONE_ASK
 from bot_starter.data_to_tree import generate_commands_tree
-from file_reader.getAdmins import getAdmins
+from reporters.ReportFile import Report_to_file
 from reporters.save_unique_in_file import Save_unique_in_file
 
 
@@ -48,7 +47,6 @@ class Telegram_menu_bot :
         self.tree = generate_commands_tree()
         self.users_mode = {}
         self.registered_users = Save_unique_in_file(FILENAME_registered_users)
-        self.admins = getAdmins()
         self.file_reporter = Report_to_file(FILENAME_report)
 
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None) -> str :
@@ -84,7 +82,7 @@ class Telegram_menu_bot :
                     message = RETURN_MENU_MESSAGE
                     bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard)
                 else:
-                    for admin in self.admins:
+                    for admin in self.tree.admins:
                         bot.IsendMessage(admin, """*משוב עבור:* "{}"
                         *מאת:*
                         {}""".format(self.users_mode[user.id].name, user))
@@ -166,7 +164,7 @@ class Telegram_menu_bot :
 
     def admin_menu(self, bot, chat_id: int, text: str, user: User.User) :
         # admin menu:
-        if user.id in self.admins :
+        if user.id in self.tree.admins :
             if text[0] == '{' and not self.users_mode[user.id].form:
                 message = json.dumps(text, indent=1)
 
@@ -211,15 +209,16 @@ class Telegram_menu_bot :
                 responses = None
                 if text_to_send in self.tree.botMenu.global_commands :
                     responses = self.tree.botMenu.global_commands[text_to_send]
-                try :
-                    if responses :
+                try:
+                    if responses:
                         self.send_response(bot, user_id, responses)
                     else :
                         bot.IsendMessage(user_id, text_to_send)
                     message = "ההודעה נשלחה בהצלחה ל{}".format(user_id)
-                except :
+                except:
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
                 return False
             bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=False)
+            self.report(bot, self.users_mode[user.id], message, text, user)
             return True
