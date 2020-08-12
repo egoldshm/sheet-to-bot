@@ -86,13 +86,12 @@ class Telegram_menu_bot :
                     self.users_mode[user.id] = self.tree.start_node
                     message = RETURN_MENU_MESSAGE
                     bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard)
-
-                for admin in self.admins:
-                    bot.Iforward_message(admin, chat_id, message_id)
+                else:
+                    for admin in self.admins:
+                        bot.Iforward_message(admin, chat_id, message_id)
                     bot.IsendMessage(chat_id, "קיבלתי את ההודעה 👍📢 מוזמן לסיים על ידי לחיצה על הכפתור למטה. או "
                                               "לשלוח עוד הודעות.",keyboard=[[DONE_FORM_MESSAGE]])
-
-                self.report(bot, self.users_mode[user.id],"", "", user)
+                self.report(bot, self.users_mode[user.id],"", text, user)
                 return "FORM"
 
             current_node = self.users_mode[user.id]
