@@ -13,7 +13,7 @@ from typing import List, Dict
 
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
-    DONE_FORM_MESSAGE
+    DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM
 from bot_starter import User
 from Configurations.bot_token_conf import CHANNEL_ID
 from bot_starter.CommandNode import CommandNode
@@ -78,9 +78,6 @@ class Telegram_menu_bot :
                 self.report(bot, self.users_mode[user.id], message, text, user)
                 return "BACK"
 
-            # test
-            print(self.users_mode[user.id].form)
-
             if self.users_mode[user.id].form:
                 if text == DONE_FORM_MESSAGE:
                     self.users_mode[user.id] = self.tree.start_node
@@ -89,8 +86,7 @@ class Telegram_menu_bot :
                 else:
                     for admin in self.admins:
                         bot.Iforward_message(admin, chat_id, message_id)
-                    bot.IsendMessage(chat_id, "קיבלתי את ההודעה 👍📢 מוזמן לסיים על ידי לחיצה על הכפתור למטה. או "
-                                              "לשלוח עוד הודעות.",keyboard=[[DONE_FORM_MESSAGE]])
+                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM ,keyboard=[[DONE_FORM_MESSAGE]])
                 self.report(bot, self.users_mode[user.id],"", text, user)
                 return "FORM"
 
@@ -109,8 +105,6 @@ class Telegram_menu_bot :
             if text in current_node :
                 new_node = current_node[text]
                 keyboard = new_node.keyboard
-                # test
-                print("node:\n" + str(new_node))
                 if new_node.children or new_node.form:
                     if new_node.form:
                         keyboard = [[DONE_FORM_MESSAGE]]

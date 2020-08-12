@@ -91,6 +91,7 @@ telegram_menu_bot = Telegram_menu_bot()
 def answer() :
     global user
     user = None
+    message_id = None
     mybot = flaskBot(bot)
 
     update = request.get_json()
@@ -110,8 +111,9 @@ def answer() :
         chat_id = chat["id"]
         user = message["from"]
 
-        text = message["text"]
         message_id = message["message_id"]
+
+        text = message["text"]
     except :
         print(update)
         text = str(update)
