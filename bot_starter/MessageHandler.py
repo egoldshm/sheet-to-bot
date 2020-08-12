@@ -180,6 +180,7 @@ class Telegram_menu_bot :
                         bot.Iforward_message(chat_id, chat_id, i)
                     bot.IsendMessage(chat_id, "הועברו בהצלחה {} הודעות".format(len(self.messages_to_forward)))
                 elif text in (CANCEL, RETURN_MENU_MESSAGE, RETURN_ONE_ASK, RESET_MESSAGE) :
+                    self.users_mode[user.id] = self.tree.start_node
                     bot.IsendMessage(chat_id, "בוטל.", keyboard=self.tree.start_node.keyboard)
                 elif text == FORWARD_TO_ALL :
                     count = 0
@@ -190,6 +191,7 @@ class Telegram_menu_bot :
                             count += 1
                         except :
                             pass
+                    self.users_mode[user.id] = self.tree.start_node
                     bot.IsendMessage(chat_id,
                                      "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count))
                 else :
