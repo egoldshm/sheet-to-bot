@@ -173,7 +173,8 @@ class Telegram_menu_bot :
                 self.messages_to_forward = []
                 bot.IsendMessage(chat_id, RESPONSE_TO_FORWARD_TO_ALL,
                                  keyboard=[[FORWARD_TO_ALL], [SEND_ONLY_TO_ME], [CANCEL]])
-            if self.users_mode[user.id] == FORWARD_TO_ALL :
+                return True
+            elif self.users_mode[user.id] == FORWARD_TO_ALL :
                 if text == SEND_ONLY_TO_ME :
                     for i in self.messages_to_forward :
                         bot.Iforward_message(chat_id, chat_id, i)
