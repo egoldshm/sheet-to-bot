@@ -66,3 +66,4 @@ class generate_commands_tree(data_to_bot) :
 
 if __name__ == "__main__" :
     x = generate_commands_tree()
+    x.start_node

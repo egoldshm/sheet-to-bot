@@ -78,6 +78,9 @@ class Telegram_menu_bot :
                 self.report(bot, self.users_mode[user.id], message, text, user)
                 return "BACK"
 
+            # test
+            print(self.users_mode[user.id].form)
+
             if self.users_mode[user.id].form:
                 if text == DONE_FORM_MESSAGE:
                     self.users_mode[user.id] = self.tree.start_node
@@ -85,9 +88,11 @@ class Telegram_menu_bot :
                     bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard)
 
                 for admin in self.admins:
-                    bot.forward_message(admin, chat_id, message_id)
+                    bot.Iforward_message(admin, chat_id, message_id)
                     bot.IsendMessage(chat_id, "קיבלתי את ההודעה 👍📢 מוזמן לסיים על ידי לחיצה על הכפתור למטה. או "
                                               "לשלוח עוד הודעות.",keyboard=[[DONE_FORM_MESSAGE]])
+
+                self.report(bot, self.users_mode[user.id],"", "", user)
                 return "FORM"
 
             current_node = self.users_mode[user.id]
@@ -105,8 +110,13 @@ class Telegram_menu_bot :
             if text in current_node :
                 new_node = current_node[text]
                 keyboard = new_node.keyboard
+                # test
+                print("node:\n" + str(new_node))
                 if new_node.children or new_node.form:
+                    if new_node.form:
+                        keyboard = [[DONE_FORM_MESSAGE]]
                     self.users_mode[user.id] = new_node
+
             else :
                 self.users_mode[user.id] = self.tree.start_node
 

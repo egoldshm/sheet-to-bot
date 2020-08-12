@@ -73,8 +73,8 @@ class flaskBot :
         keyboard = self.get_valid_keyboard(keyboard)
         self.bot.sendSticker(chat_id, sticker_id, reply_markup=keyboard)
 
-    def IsendPolling(self) :
-        pass
+    def Iforward_message(self, message_id, chat_id, to_chat_id):
+        bot.forwardMessage(message_id, chat_id, to_chat_id)
 
     def get_valid_keyboard(self, keyboard) :
         if keyboard and not isinstance(keyboard, str) :
