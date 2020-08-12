@@ -214,7 +214,7 @@ class Telegram_menu_bot :
                 2. *להעביר הודעה לכולם* - תכתוב פשוט "{}", ותפעל לפי ההוראות.
                 3. *לשלוח הודעה פרטית* - תכתוב פשוט {}, ואז שורה מתחת את הID של המשתמש שאתה רוצה לשלוח לו, ושורה מתחת את הטקסט.
                 4. *לאפס את התפריט* - תשלח {}, וזה פשוט יאפס את התפריט. יש לעשות את זה אחרי עדכון של התוכן בבוט.
-                 5. *לקבל מידע על הודעה* - תשלח הודעה שהיא לא טקסט. ותקבל את המידע המלא עליה.""".format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip, RESET_MESSAGE)
+                 5. *לקבל מידע על הודעה* - תשלח הודעה שהיא לא טקסט. ותקבל את המידע המלא עליה.""".format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip(), RESET_MESSAGE)
 
             # reset the commands in the bot
             elif text == RESET_MESSAGE :
