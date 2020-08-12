@@ -30,7 +30,7 @@ def create_response(res: Dict) -> Response :
 
     :rtype: Response
     """
-    if res["type"].upper() not in ("TEXT", "TXT", "") :
+    if res["type"].upper() not in ("TEXT", "TXT", "", "FORM") :
         data_id, message = splitMessage(res["answer"])
         r = Response(message, link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE",
