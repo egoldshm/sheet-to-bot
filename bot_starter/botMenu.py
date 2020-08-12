@@ -30,14 +30,19 @@ def create_response(res: Dict) -> Response :
 
     :rtype: Response
     """
-    if res["type"].upper() not in ("TEXT", "TXT", "", "FORM") :
+    if res["type"].upper() not in ("TEXT", "TXT", "") :
         data_id, message = splitMessage(res["answer"])
         r = Response(message, link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE",
                      is_contact=res["is_contact"] == "TRUE", message_type=res["type"], data_id=data_id)
-    else :
+    elif res["type"].upper() == "FORM":
+        r = Response(res["answer"], link_preview=res["disable_web_page_preview"] != "TRUE",
+                     mark_down=res["disable_markdown"] != "TRUE",
+                     is_contact=res["is_contact"] == "TRUE", message_type=res["type"])
+    else:
         r = Response(res["answer"], link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE", is_contact=res["is_contact"] == "TRUE")
+
     inline_keyboard: str = res["inline_keyboard"]
     result_inline_keyboard = []
     if inline_keyboard != "":
