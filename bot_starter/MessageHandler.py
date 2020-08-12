@@ -67,7 +67,7 @@ class Telegram_menu_bot :
             if user.id not in self.users_mode :
                 self.users_mode[user.id] = self.tree.start_node
 
-            if text == RETURN_MENU_MESSAGE :
+            if text == RETURN_MENU_MESSAGE:
                 keyboard = self.tree.start_node.keyboard
                 self.users_mode[user.id] = self.tree.start_node
                 message = RETURN_MESSAGE
@@ -75,7 +75,7 @@ class Telegram_menu_bot :
                 self.report(bot, self.tree.start_node, message, text, user)
                 return "BACK"
 
-            elif text == RETURN_ONE_ASK :
+            elif text == RETURN_ONE_ASK:
                 self.users_mode[user.id] = self.users_mode[user.id].parent
                 keyboard = self.users_mode[user.id].keyboard
                 message = RETURN_ONE_MESSAGE
@@ -109,6 +109,8 @@ class Telegram_menu_bot :
 
             return "Done"
         except Exception as ex :
+            if user and isinstance(user, User.User):
+                self.users_mode[user.id] = self.tree.start_node
             print(bot, user, text)
             print("ERROR (in messageHandler): " + str(ex))
             return "ERROR"
