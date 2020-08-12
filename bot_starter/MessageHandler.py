@@ -95,11 +95,13 @@ class Telegram_menu_bot :
                 responses = self.tree.botMenu.responses_to_command(text, current_node)
 
             # check if this son:
-            if text in current_node :
+            if text in current_node:
                 new_node = current_node[text]
                 keyboard = new_node.keyboard
-                if new_node.children :
+                if new_node.children:
                     self.users_mode[user.id] = new_node
+            else:
+                self.users_mode[user.id] = self.tree.start_node
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
 
