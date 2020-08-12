@@ -22,4 +22,4 @@ RECEIVED_MESSAGE_FORM = "קיבלתי את ההודעה 👍📢 מוזמן לס
 FORWARD_TO_ALL = "העבר לכולם"
 SEND_ONLY_TO_ME = "שלח לי 😊"
 CANCEL = "ביטול ❌"
-RESPONSE_TO_FORWARD_TO_ALL = "אחלה, עכשיו שלח את ההודעות. ולסיום לחץ על 'שלח' או על 'בדיקה'"
+RESPONSE_TO_FORWARD_TO_ALL = "אחלה, עכשיו שלח את ההודעות. ולסיום לחץ על 'שלח לי' או על 'שלח לכולם'"
