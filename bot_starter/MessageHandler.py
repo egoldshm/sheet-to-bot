@@ -164,7 +164,7 @@ class Telegram_menu_bot :
     def admin_menu(self, bot, chat_id: int, text: str, user: User.User) :
         # admin menu:
         if user.id in self.admins :
-            if text[0] == '{' :
+            if text[0] == '{' and not self.users_mode[user.id].form:
                 message = json.dumps(text, indent=1)
 
             # reset the commands in the bot
