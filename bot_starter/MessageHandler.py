@@ -98,7 +98,6 @@ class Telegram_menu_bot :
             if text == self.tree.start_node.name :
                 self.users_mode[user.id] = self.tree.start_node
                 current_node = self.users_mode[user.id]
-                keyboard = current_node.keyboard
                 responses = self.tree.start_node.responses
             else :
                 responses = self.tree.botMenu.responses_to_command(text, current_node)
@@ -114,6 +113,7 @@ class Telegram_menu_bot :
 
             else :
                 self.users_mode[user.id] = self.tree.start_node
+                keyboard = self.tree.start_node.keyboard
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
 
@@ -156,6 +156,10 @@ class Telegram_menu_bot :
             elif response.message_type == "sticker" :
                 file_id = response.data_id
                 bot.IsendSticker(chat_id, file_id, message)
+            elif response.message_type == "forward":
+                from_chat_id = response.data_id
+                bot.Iforward_message(chat_id, from_chat_id, message)
+
             else :
                 bot.IsendMessage(chat_id, message, keyboard=keyboard, inline_keyboard=response.inline_keyboard,
                                  mark_down=response.mark_down,
@@ -202,7 +206,13 @@ class Telegram_menu_bot :
             if text[0] == '{' and not self.users_mode[user.id].form :
                 message = json.dumps(text, indent=1)
 
-
+            elif text in ("/admin", "admin","מנהלים", "תפריט ניהול"):
+                message = """*מה אתה בתור מנהל יכול לעשות?*
+                1. *לשלוח הודעה לכולם* - תשלח "{}" (בלי גרשיים, כמובן) ושורה מתחת תכתוב את ההודעה שאתה רוצה לשלוח לכולם. זה ישלח לכולם.
+                2. *להעביר הודעה לכולם* - תכתוב פשוט "{}", ותפעל לפי ההוראות.
+                3. *לשלוח הודעה פרטית* - תכתוב פשוט {}, ואז שורה מתחת את הID של המשתמש שאתה רוצה לשלוח לו, ושורה מתחת את הטקסט.
+                4. *לאפס את התפריט* - תשלח {}, וזה פשוט יאפס את התפריט. יש לעשות את זה אחרי עדכון של התוכן בבוט.
+                 5. *לקבל מידע על הודעה* - תשלח הודעה שהיא לא טקסט. ותקבל את המידע המלא עליה.""".format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip, RESET_MESSAGE)
 
             # reset the commands in the bot
             elif text == RESET_MESSAGE :
@@ -253,6 +263,10 @@ class Telegram_menu_bot :
                 except :
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
+                if text in ("/admin", "admin", "מנהלים", "תפריט ניהול"):
+                    bot.IsendMessage(chat_id, "אופס. אתה לא מנהל.")
+                    self.report(bot, self.users_mode[user.id], "", text, user)
+                    return True
                 return False
             bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=False)
             self.report(bot, self.users_mode[user.id], message, text, user)
