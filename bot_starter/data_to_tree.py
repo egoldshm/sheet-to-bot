@@ -15,7 +15,7 @@ from bot_starter.values_to_bot import data_to_bot
 from anytree import RenderTree
 
 
-class generate_commands_tree(data_to_bot):
+class generate_commands_tree(data_to_bot) :
     start_node: CommandNode
 
     def __init__(self) :
@@ -47,7 +47,8 @@ class generate_commands_tree(data_to_bot):
 
         for res in commands_by_father_name :
             responses.append(create_response(res))
-        father_node.responses = responses
+
+        father_node.set_responses(responses)
 
         keyboard = self.botMenu.menu_by_father(father_node.name)
 

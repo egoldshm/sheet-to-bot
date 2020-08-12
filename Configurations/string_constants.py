@@ -15,3 +15,5 @@ SEND_MESSAGE_TO_ALL = "שלח לכולם:\n"
 SEND_TO_USER = "שלח הודעה:\n"
 MENU_LIST = ("מה אתה יודע לעשות?", "מה יש בבוט?", "רשימת פקודות", "תפריט")
 RESET_MESSAGE = "/reset"
+
+DONE_FORM_MESSAGE = "סיימתי 👍"

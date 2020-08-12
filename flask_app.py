@@ -111,10 +111,11 @@ def answer() :
         user = message["from"]
 
         text = message["text"]
+        message_id = message["message_id"]
     except :
         print(update)
         text = str(update)
     if user :
         user = User(user["id"], user.get("first_name"), user.get("last_name"), user.get("user_name"))
-        return telegram_menu_bot.messageHandler(chat_id, mybot, user, text)
+        return telegram_menu_bot.messageHandler(chat_id, mybot, user, text, message_id=message_id)
     return "ERROR"

@@ -15,14 +15,16 @@ from bot_starter.Response import Response
 class CommandNode(Node):
     keyboard: List[List[str]]
     responses: List[Response]
+    form: str
 
-    def __init__(self, name="/start", responses=None, parent=None, children=None, keyboard=None, **kwargs):
+    def __init__(self, name="/start", responses:List[Response]=None, parent=None, children=None, keyboard=None, **kwargs):
         super().__init__(name, parent, children, **kwargs)
+        self.set_responses(responses)
         self.keyboard = keyboard
-        self.responses = responses
 
-    responses: List
-    keyboard: List[List[str]]
+    def set_responses(self, responses:List[Response]):
+        self.form = self.name if any(map(lambda i: i.message_type == "form", responses)) else ""
+        self.responses = responses
 
     def __contains__(self, item: str):
         for sub_command in self.children:
