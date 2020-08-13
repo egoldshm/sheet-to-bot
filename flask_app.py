@@ -101,14 +101,14 @@ def answer():
     count = count + 1
     update = request.get_json()
 
-    print("{}: {}".format(count, update))
     try :
         if "message" not in update :
             print("problem with 'message'")
             print(str(update))
         message = update["message"]
+        print("message{}: {}".format(count, message))
         if "text" not in message :
-            print("problem with text")
+            print("problem with 'text'")
             print(str(message))
         if "chat" not in message :
             print("problem with chat")
