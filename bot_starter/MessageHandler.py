@@ -15,7 +15,7 @@ from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
     DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL, \
-    ADMIN_MENU
+    ADMIN_MENU, ADMIN_MENU_COMMAND
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
@@ -208,7 +208,7 @@ class Telegram_menu_bot :
                 message = json.dumps(text, indent=1)
                 mark_down = False
 
-            elif text in ("/admin", "admin","מנהלים", "תפריט ניהול"):
+            elif text in ADMIN_MENU_COMMAND:
                 message = ADMIN_MENU.format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip(), RESET_MESSAGE)
 
             # reset the commands in the bot
@@ -265,7 +265,7 @@ class Telegram_menu_bot :
             self.report(bot, self.users_mode[user.id], message, text, user)
             return True
 
-        if text in ("/admin", "admin", "מנהלים", "תפריט ניהול") :
+        if text in ADMIN_MENU_COMMAND :
             bot.IsendMessage(chat_id, "אופס. אתה לא מנהל.")
             self.report(bot, self.users_mode[user.id], "", text, user)
             return True

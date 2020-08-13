@@ -37,23 +37,25 @@ def list_of_lists_to_keyboards(buttons: List[List[str]]) :
 
 
 def list_of_lists_to_inline_keyboard(buttons: List[List[Tuple[str, str]]]) :
-    if not buttons:
+    if not buttons :
         return None
     for i in range(len(buttons)) :
         for j in range(len(buttons[i])) :
             item = buttons[i][j]
             buttons[i][j] = InlineKeyboardButton(text=item[0], url=item[1])
-    return InlineKeyboardMarkup(inline_keyboard = buttons)
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 class flaskBot :
     def __init__(self, bot_p) :
         self.bot = bot_p
 
-    def IsendMessage(self, chat_id, message, keyboard=None, mark_down=True, inline_keyboard=None, disable_web_preview=None) :
+    def IsendMessage(self, chat_id, message, keyboard=None, mark_down=True, inline_keyboard=None,
+                     disable_web_preview=None) :
         keyboard = self.get_valid_keyboard(keyboard)
         inline_keyboard = list_of_lists_to_inline_keyboard(inline_keyboard)
-        self.bot.sendMessage(chat_id, message, reply_markup=keyboard if keyboard else inline_keyboard, parse_mode='Markdown' if mark_down else None,
+        self.bot.sendMessage(chat_id, message, reply_markup=keyboard if keyboard else inline_keyboard,
+                             parse_mode='Markdown' if mark_down else None,
                              disable_web_page_preview=disable_web_preview)
 
     def IsendFile(self, chat_id, file_id, text=None, keyboard=None, mark_down=True, disable_web_preview=None,
@@ -73,7 +75,7 @@ class flaskBot :
         keyboard = self.get_valid_keyboard(keyboard)
         self.bot.sendSticker(chat_id, sticker_id, reply_markup=keyboard)
 
-    def Iforward_message(self, chat_id, from_chat_id, message_id):
+    def Iforward_message(self, chat_id, from_chat_id, message_id) :
         bot.forwardMessage(chat_id, from_chat_id, message_id)
 
     def get_valid_keyboard(self, keyboard) :
@@ -86,15 +88,20 @@ class flaskBot :
 
 telegram_menu_bot = Telegram_menu_bot()
 
+count = 0
+
 
 @app.route('/{}'.format(secret), methods=["POST"])
-def answer() :
+def answer():
     global user
+    global count
     user = None
     message_id = None
     mybot = flaskBot(bot)
-
+    count = count + 1
     update = request.get_json()
+
+    print("{}: {}".format(count, update))
     try :
         if "message" not in update :
             print("problem with 'message'")
