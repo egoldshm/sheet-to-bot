@@ -14,7 +14,8 @@ from typing import List, Dict
 from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
-    DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL
+    DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL, \
+    ADMIN_MENU
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
@@ -209,12 +210,7 @@ class Telegram_menu_bot :
                 mark_down = False
 
             elif text in ("/admin", "admin","מנהלים", "תפריט ניהול"):
-                message = """*מה אתה בתור מנהל יכול לעשות?*
-                1. *לשלוח הודעה לכולם* - תשלח "{}" (בלי גרשיים, כמובן) ושורה מתחת תכתוב את ההודעה שאתה רוצה לשלוח לכולם. זה ישלח לכולם.
-                2. *להעביר הודעה לכולם* - תכתוב פשוט "{}", ותפעל לפי ההוראות.
-                3. *לשלוח הודעה פרטית* - תכתוב פשוט "{}", ואז שורה מתחת את הID של המשתמש שאתה רוצה לשלוח לו, ושורה מתחת את הטקסט.
-                4. *לאפס את התפריט* - תשלח "{}", וזה פשוט יאפס את התפריט. יש לעשות את זה אחרי עדכון של התוכן בבוט.
-                 5. *לקבל מידע על הודעה* - תשלח הודעה שהיא לא טקסט. ותקבל את המידע המלא עליה.""".format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip(), RESET_MESSAGE)
+                message = ADMIN_MENU.format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip(), RESET_MESSAGE)
 
             # reset the commands in the bot
             elif text == RESET_MESSAGE :
@@ -265,11 +261,12 @@ class Telegram_menu_bot :
                 except :
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
-                if text in ("/admin", "admin", "מנהלים", "תפריט ניהול"):
-                    bot.IsendMessage(chat_id, "אופס. אתה לא מנהל.")
-                    self.report(bot, self.users_mode[user.id], "", text, user)
-                    return True
                 return False
             bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user)
             return True
+        if text in ("/admin", "admin", "מנהלים", "תפריט ניהול") :
+            bot.IsendMessage(chat_id, "אופס. אתה לא מנהל.")
+            self.report(bot, self.users_mode[user.id], "", text, user)
+            return True
+        return False
