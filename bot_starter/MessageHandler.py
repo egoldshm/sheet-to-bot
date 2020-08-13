@@ -42,7 +42,6 @@ def report_to_channel(bot, message, text, user, node) :
 class Telegram_menu_bot :
     users_mode: Dict[int, CommandNode]
     tree: generate_commands_tree
-    admins: List[int]
 
     def __init__(self) :
         self.tree = generate_commands_tree()
@@ -265,6 +264,7 @@ class Telegram_menu_bot :
             bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user)
             return True
+
         if text in ("/admin", "admin", "מנהלים", "תפריט ניהול") :
             bot.IsendMessage(chat_id, "אופס. אתה לא מנהל.")
             self.report(bot, self.users_mode[user.id], "", text, user)

@@ -13,11 +13,17 @@ from bot_starter.Response import Response
 
 
 class CommandNode(Node):
+    """
+
+    """
     keyboard: List[List[str]]
     responses: List[Response]
     form: str
 
     def __init__(self, name="/start", responses:List[Response]=None, parent=None, children=None, keyboard=None, **kwargs):
+        """
+        ctor of CommandNode
+        """
         super().__init__(name, parent, children, **kwargs)
         self.set_responses(responses)
         self.keyboard = keyboard
