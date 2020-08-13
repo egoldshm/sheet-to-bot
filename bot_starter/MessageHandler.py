@@ -52,6 +52,7 @@ class Telegram_menu_bot :
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None) -> str :
         try :
             if text in MENU_LIST :
+                self.tree.generate_photo("photo_tree.png")
                 self.send_menu(bot, chat_id, text, user)
                 return "MENU"
 
