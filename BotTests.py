@@ -28,19 +28,19 @@ class TelepbotBot:
     def __init__(self, bot_p):
         self.bot = bot_p
 
-    def IsendMessage(self, chat_id, message, keyboard=None, mark_down=True, disable_web_preview=False):
+    def IsendMessage(self, chat_id, message, keyboard=None, mark_down=True, inline_keyboard=None, disable_web_preview=False):
         keyboard = self.get_valid_keyboard(keyboard)
-        self.bot.send_message(chat_id, message, parse_mode='Markdown' if mark_down else None, reply_markup=keyboard,
+        self.bot.send_message(chat_id, message, parse_mode='Markdown' if mark_down else None, reply_markup=keyboard if keyboard else inline_keyboard,
                               disable_web_page_preview=disable_web_preview)
 
-    def IsendFile(self, chat_id, file_id, text=None, keyboard=None, mark_down=True):
+    def IsendFile(self, chat_id, file_id, text=None, keyboard=None, inline_keyboard=None, mark_down=True):
         keyboard = self.get_valid_keyboard(keyboard)
-        self.bot.send_document(chat_id, file_id, caption=text, reply_markup=keyboard,
+        self.bot.send_document(chat_id, file_id, caption=text, reply_markup=keyboard if keyboard else inline_keyboard,
                                parse_mode='Markdown' if mark_down else None)
 
-    def IsendPhoto(self, chat_id, photo_id, text, keyboard=None, mark_down=True):
+    def IsendPhoto(self, chat_id, photo_id, text, keyboard=None, inline_keyboard=None, mark_down=True):
         keyboard = self.get_valid_keyboard(keyboard)
-        self.bot.send_photo(chat_id, photo_id, caption=text, reply_markup=keyboard,
+        self.bot.send_photo(chat_id, photo_id, caption=text, reply_markup=keyboard if keyboard else inline_keyboard,
                             parse_mode='Markdown' if mark_down else None)
 
     def IsendSticker(self, chat_id, sticker_id, keyboard=None, **kwargs):
