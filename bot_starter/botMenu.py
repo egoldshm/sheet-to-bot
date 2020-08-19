@@ -99,7 +99,7 @@ class BotMenu :
                 already_inserted.append(name)
                 keyboard = self.menu_by_father(name)
                 if keyboard:
-                    keyboard.append([[RETURN_MENU_MESSAGE]])
+                    keyboard.append([RETURN_MENU_MESSAGE])
                 result_dict[name] = (responses, keyboard)
         return result_dict
 
