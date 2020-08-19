@@ -4,6 +4,7 @@
 #                 part of project SheetToBot                     #
 #                       Eytan Goldshmidt                         #
 #               eitntt@gmail.com  - t.me/egoldshm                #
+#    #      השימוש ללא אישור אסור לפי ההלכה ולפי הרישיון והחוק הבינלאומי
 #                                                                #
 ##################################################################
 
@@ -15,12 +16,12 @@ from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
     DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL, \
-    ADMIN_MENU, ADMIN_MENU_COMMAND
+    ADMIN_MENU, ADMIN_MENU_COMMAND, RETURN_MESSAGE
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
 from bot_starter.botMenu import RETURN_MENU_MESSAGE, RETURN_ONE_ASK
-from bot_starter.data_to_tree import generate_commands_tree
+from bot_starter.generate_commands_tree import Generate_commands_tree
 from reporters.ReportFile import Report_to_file
 from reporters.save_unique_in_file import Save_unique_in_file
 
@@ -41,24 +42,25 @@ def report_to_channel(bot, message, text, user, node) :
 
 class Telegram_menu_bot :
     users_mode: Dict[int, CommandNode]
-    tree: generate_commands_tree
+    tree: Generate_commands_tree
 
     def __init__(self) :
-        self.tree = generate_commands_tree()
+        self.tree = Generate_commands_tree()
         self.users_mode = {}
         self.registered_users = Save_unique_in_file(FILENAME_registered_users)
         self.file_reporter = Report_to_file(FILENAME_report)
 
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None) -> str :
         try :
-            if text in MENU_LIST :
-                self.tree.generate_photo("photo_tree.png")
-                self.send_menu(bot, chat_id, text, user)
-                return "MENU"
-
             keyboard = None
             if self.admin_menu(bot, chat_id, text, user, message_id) :
                 return "ADMIN_MENU"
+
+            # return menu list
+            if text in MENU_LIST:
+                # self.tree.generate_photo("photo_tree.png")
+                self.send_menu(bot, chat_id, text, user)
+                return "MENU"
 
             # new user
             if user.id not in self.users_mode :
@@ -73,7 +75,7 @@ class Telegram_menu_bot :
                     self.users_mode[user.id] = self.users_mode[user.id].parent if self.users_mode[
                         user.id].parent else self.tree.start_node
                     keyboard = self.users_mode[user.id].keyboard
-                message = RETURN_MENU_MESSAGE
+                message = RETURN_MESSAGE
                 bot.IsendMessage(chat_id, message, keyboard=keyboard)
                 self.report(bot, self.users_mode[user.id], message, text, user)
                 return "BACK"
@@ -81,7 +83,7 @@ class Telegram_menu_bot :
             if self.users_mode[user.id].form :
                 if text == DONE_FORM_MESSAGE :
                     self.users_mode[user.id] = self.tree.start_node
-                    message = RETURN_MENU_MESSAGE
+                    message = RETURN_MESSAGE
                     bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard)
                 else :
                     for admin in self.tree.admins :
@@ -112,9 +114,11 @@ class Telegram_menu_bot :
                         keyboard = [[DONE_FORM_MESSAGE]]
                     self.users_mode[user.id] = new_node
 
-            else :
+            elif text not in self.tree.botMenu.global_commands:
                 self.users_mode[user.id] = self.tree.start_node
                 keyboard = self.tree.start_node.keyboard
+            else:
+                keyboard = self.tree.botMenu.global_commands[text][1]
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
 

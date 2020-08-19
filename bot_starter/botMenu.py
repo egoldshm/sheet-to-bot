@@ -1,8 +1,11 @@
 ##################################################################
+#                                                                #
 #               copyright Eytan Goldshmidt (2020)                #
 #                 part of project SheetToBot                     #
 #                       Eytan Goldshmidt                         #
-#                     eitntt@gmail.com                           #
+#               eitntt@gmail.com  - t.me/egoldshm                #
+#    #        השימוש ללא אישור אסור לפי ההלכה ולפי הרישיון והחוק הבינלאומי
+#                                                                #
 ##################################################################
 
 from typing import List, Dict, Optional, Tuple
@@ -35,30 +38,30 @@ def create_response(res: Dict) -> Response :
         r = Response(message, link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE",
                      is_contact=res["is_contact"] == "TRUE", message_type=res["type"], data_id=data_id)
-    elif res["type"].upper() == "FORM":
+    elif res["type"].upper() == "FORM" :
         r = Response(res["answer"], link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE",
                      is_contact=res["is_contact"] == "TRUE", message_type=res["type"])
-    else:
+    else :
         r = Response(res["answer"], link_preview=res["disable_web_page_preview"] != "TRUE",
                      mark_down=res["disable_markdown"] != "TRUE", is_contact=res["is_contact"] == "TRUE")
 
     inline_keyboard: str = res["inline_keyboard"]
     result_inline_keyboard = []
-    if inline_keyboard != "":
-        try:
+    if inline_keyboard != "" :
+        try :
             list_of_rows = inline_keyboard.split("\n")
-            for row in list_of_rows:
+            for row in list_of_rows :
                 list_of_items = row.split("|")
                 result_for_line = []
-                for item in list_of_items:
+                for item in list_of_items :
                     text = item.split("-")[0].strip()
                     # todo: add check to format and url
                     url = item.split("-")[1].strip()
                     result_for_line.append((text, url))
                 result_inline_keyboard.append(result_for_line)
             r.inline_keyboard = result_inline_keyboard
-        except:
+        except :
             print("problem with parse inline keyboard - " + inline_keyboard)
             print("result: " + str(result_inline_keyboard) + " | " + str(result_for_line))
     return r
@@ -66,7 +69,7 @@ def create_response(res: Dict) -> Response :
 
 class BotMenu :
     command: List[Dict]
-    global_commands: Dict[str, List[Response]]
+    global_commands: Dict[str, Tuple[List[Response], Optional[List[List[str]]]]]
     contacts: List[Tuple[str, str]]
 
     def __init__(self, commands: List[dict]) :
@@ -74,23 +77,30 @@ class BotMenu :
         self.global_commands = self.reset_global_commands()
         self.contacts = self.reset_contacts()
 
-    def reset_global_commands(self) -> Dict[str, List[Response]] :
+    def reset_global_commands(self, all_commands_is_global: bool = True) -> Dict[str, Tuple[List[Response], Optional[List[List[str]]]]] :
         """
         found all commands that hasn't father - and become to global commands
 
         :return: dict of "name of command" => "response"
         """
+        keyboard: List[List[str]]
         already_inserted = []
         result_dict = {}
         for command in self.commands :
-            if command["name"] not in already_inserted and command["father_menu"] == "" :
+            name = command["name"]
+            if name not in already_inserted and (command["father_menu"] == "" or all_commands_is_global) :
                 commands_by_father_name = list(
-                    filter(lambda i : i["father_menu"] == "" and i["name"] == command["name"], self.commands))
+                    filter(
+                        lambda i : (i["father_menu"] == "" or all_commands_is_global) and i["name"] == name,
+                        self.commands))
                 responses = []
                 for res in commands_by_father_name :
                     responses.append(create_response(res))
-                already_inserted.append(command["name"])
-                result_dict[command["name"]] = responses
+                already_inserted.append(name)
+                keyboard = self.menu_by_father(name)
+                if keyboard:
+                    keyboard.append([[RETURN_MENU_MESSAGE]])
+                result_dict[name] = (responses, keyboard)
         return result_dict
 
     def reset_contacts(self) -> List[Tuple[str, str]] :
@@ -103,7 +113,7 @@ class BotMenu :
 
         # search in global commands
         if text in self.global_commands :
-            return self.global_commands[text]
+            return self.global_commands[text][0]
 
         # contacts -> text only:
         result = []
@@ -134,7 +144,7 @@ class BotMenu :
         father_menu = fathers[0]["father_menu"]
         return father_menu
 
-    def menu_by_father(self, father_name="/start") :
+    def menu_by_father(self, father_name="/start"):
 
         # take only command that father_menu is father name
         commands_for_menu = list(filter(lambda i : i["father_menu"] == father_name, self.commands))
@@ -142,7 +152,7 @@ class BotMenu :
         # remove duplicates
         temp_commands_for_menu = []
         for i in commands_for_menu :
-            if i["name"] not in map(lambda j: j["name"], temp_commands_for_menu) :
+            if i["name"] not in map(lambda j : j["name"], temp_commands_for_menu) :
                 temp_commands_for_menu.append(i)
         commands_for_menu = temp_commands_for_menu
 
@@ -158,7 +168,7 @@ class BotMenu :
         buttons = []
         for i in range(max_row + 1) :
             columns = [int(j["column"]) for j in commands_for_menu if j["row"] == str(i)]
-            max_column = max([1] if columns == [] else (columns))
+            max_column = max([1] if columns == [] else columns)
             buttons.append(["" for j in range(max_column + 1)])
         for i in commands_for_menu :
             if not i["row"].isdigit() or not i["column"].isdigit() :

@@ -1,10 +1,12 @@
 ##################################################################
+#                                                                #
 #               copyright Eytan Goldshmidt (2020)                #
 #                 part of project SheetToBot                     #
 #                       Eytan Goldshmidt                         #
-#                     eitntt@gmail.com                           #
+#               eitntt@gmail.com  - t.me/egoldshm                #
+#    #      השימוש ללא אישור אסור לפי ההלכה ולפי הרישיון והחוק הבינלאומי
+#                                                                #
 ##################################################################
-
 
 from anytree.dotexport import RenderTreeGraph
 
@@ -17,7 +19,7 @@ from anytree import RenderTree
 from file_reader.getAdmins import getAdmins
 
 
-class generate_commands_tree(data_to_bot) :
+class Generate_commands_tree(data_to_bot) :
     start_node: CommandNode
 
     def __init__(self) :
@@ -68,4 +70,4 @@ class generate_commands_tree(data_to_bot) :
 
 
 if __name__ == "__main__" :
-    x = generate_commands_tree()
+    x = Generate_commands_tree()

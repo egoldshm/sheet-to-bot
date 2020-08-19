@@ -1,10 +1,9 @@
 COMMAND_NOT_FOUND_MESSAGE = "לא הבנתי 🤷‍♂️"
 
 RETURN_MENU_MESSAGE = "חזור לתפריט הראשי 🔙"
-RETURN_MESSAGE = "חזרתי לתפריט הראשי 🔙"
-
 RETURN_ONE_ASK = "חזור אחורה 🔙"
-RETURN_ONE_MESSAGE = "חזרתי אחד אחורה 🔙"
+
+RETURN_MESSAGE = "חזרתי 🔙"
 
 IGNORE_WORDS = ["הרב", "מר", "פרופ'", "גב'", """ד"ר""", "גברת"]
 

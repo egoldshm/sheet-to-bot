@@ -1,8 +1,11 @@
 ##################################################################
+#                                                                #
 #               copyright Eytan Goldshmidt (2020)                #
 #                 part of project SheetToBot                     #
 #                       Eytan Goldshmidt                         #
-#                     eitntt@gmail.com                           #
+#               eitntt@gmail.com  - t.me/egoldshm                #
+#    #      השימוש ללא אישור אסור לפי ההלכה ולפי הרישיון והחוק הבינלאומי
+#                                                                #
 ##################################################################
 
 import datetime
