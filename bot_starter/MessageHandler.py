@@ -27,13 +27,13 @@ from reporters.save_unique_in_file import Save_unique_in_file
 
 
 def report_to_channel(bot, message, text=None, user=None, node=None, message_id=None) :
-    try :
+    # try :
         if not text:
             bot.IsendMessage(CHANNEL_ID, message, mark_down=False)
         else:
             bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user, message_id, text, message, node), mark_down=False)
-    except :
-        print("Not find channel")
+    #except :
+    #    print("Not find channel")
 
 
 class Telegram_menu_bot :

@@ -31,7 +31,8 @@ ADMIN_MENU = """*מה אתה בתור מנהל יכול לעשות?*
 4. *לאפס את התפריט* - תשלח "{}", וזה פשוט יאפס את התפריט. יש לעשות את זה אחרי עדכון של התוכן בבוט.
 5. *לקבל מידע על הודעה* - תשלח הודעה שהיא לא טקסט. ותקבל את המידע המלא עליה."""
 
-TEXT_TO_CHANNEL_REPORT = """<b>הודעה מהבוט<b>
+TEXT_TO_CHANNEL_REPORT = """<b>הודעה מהבוט</b>
+<u>משתמש 💬:</u>
 {}
 מספר הודעה 🔢:
 <code>{}</code>
