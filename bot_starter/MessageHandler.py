@@ -134,6 +134,16 @@ class Telegram_menu_bot :
         list_to_send = message_to_send.split("\n")
         for i in range(0, int(len(list_to_send) / ROWS) + 1) :
             bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]))
+
+        list_to_send = ["*פקודות גלובליות:*"]
+        for key, value in self.tree.botMenu.global_commands.items():
+            list_to_send.append("*{}*:".format(key))
+            list_to_send.append("*מקלדת:* {}".format(value[1]))
+            for response in value[0]:
+                list_to_send.append("-" + response.text)
+        for i in range(0, int(len(list_to_send) / ROWS) + 1) :
+            bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]))
+
         self.report(bot, self.users_mode[user.id], "<התפריט נשלח>", text, user)
 
     def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User) :
