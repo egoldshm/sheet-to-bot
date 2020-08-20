@@ -58,20 +58,20 @@ class flaskBot :
         keyboard = self.get_valid_keyboard(keyboard)
         inline_keyboard = list_of_lists_to_inline_keyboard(inline_keyboard)
         self.bot.sendMessage(chat_id, message, reply_markup=keyboard if keyboard else inline_keyboard,
-                             parse_mode='Markdown' if mark_down else "None",
+                             parse_mode='Markdown' if mark_down else "HTML",
                              disable_web_page_preview=disable_web_preview)
 
     def IsendFile(self, chat_id, file_id, text=None, keyboard=None, mark_down=True, disable_web_preview=None,
                   inline_keyboard=None) :
         keyboard = self.get_valid_keyboard(keyboard)
         inline_keyboard = list_of_lists_to_inline_keyboard(inline_keyboard)
-        self.bot.sendDocument(chat_id, file_id, caption=text, parse_mode='Markdown' if mark_down else None,
+        self.bot.sendDocument(chat_id, file_id, caption=text, parse_mode='Markdown' if mark_down else "HTML",
                               reply_markup=keyboard if keyboard else inline_keyboard)
 
     def IsendPhoto(self, chat_id, photo_id, text=None, keyboard=None, mark_down=True, inline_keyboard=None) :
         keyboard = self.get_valid_keyboard(keyboard)
         inline_keyboard = list_of_lists_to_inline_keyboard(inline_keyboard)
-        self.bot.sendPhoto(chat_id, photo_id, caption=text, parse_mode='Markdown' if mark_down else None,
+        self.bot.sendPhoto(chat_id, photo_id, caption=text, parse_mode='Markdown' if mark_down else "HTML",
                            reply_markup=keyboard if keyboard else inline_keyboard)
 
     def IsendSticker(self, chat_id, sticker_id, keyboard=None, **kwargs) :
