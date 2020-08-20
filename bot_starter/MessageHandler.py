@@ -135,9 +135,9 @@ class Telegram_menu_bot :
         for i in range(0, int(len(list_to_send) / ROWS) + 1) :
             bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]))
 
-        list_to_send = ["*פקודות גלובליות:*"]
+        list_to_send = ["<bold>פקודות גלובליות:</bold>"]
         for key, value in self.tree.botMenu.global_commands.items():
-            list_to_send.append("*{}*:".format(key))
+            list_to_send.append("<u>{}:</u>".format(key))
             for response in value[0]:
                 list_to_send.append("-" + response.text)
 
