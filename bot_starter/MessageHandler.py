@@ -31,7 +31,7 @@ def report_to_channel(bot, message, text=None, user=None, node=None, message_id=
         if not text:
             bot.IsendMessage(CHANNEL_ID, message, mark_down=False)
         else:
-            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user, message_id, text, message, node), mark_down=False)
+            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user.id, user, message_id, text, message, node), mark_down=False)
     #except :
     #    print("Not find channel")
 
@@ -216,8 +216,9 @@ class Telegram_menu_bot :
                 return True
 
             if text[0] == '{' and not self.users_mode[user.id].form :
-                message = json.dumps(text, indent=1)
+                message = json.dumps(text, indent=3)
                 mark_down = False
+                message = "<code>{}</code>".format(message)
 
             elif text in ADMIN_MENU_COMMAND :
                 message = ADMIN_MENU.format(SEND_MESSAGE_TO_ALL.strip(), FORWARD_TO_ALL, SEND_TO_USER.strip(),

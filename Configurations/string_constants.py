@@ -32,7 +32,7 @@ ADMIN_MENU = """*מה אתה בתור מנהל יכול לעשות?*
 5. *לקבל מידע על הודעה* - תשלח הודעה שהיא לא טקסט. ותקבל את המידע המלא עליה."""
 
 TEXT_TO_CHANNEL_REPORT = """<b>הודעה מהבוט</b>
-<u>משתמש 💬:</u>
+<a href="tg://user?id={}"><u>משתמש 💬:</u></a>
 {}
 מספר הודעה 🔢:
 <code>{}</code>
