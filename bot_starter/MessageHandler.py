@@ -48,6 +48,10 @@ class Telegram_menu_bot :
 
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None) -> str :
         try :
+            # new user
+            if user.id not in self.users_mode :
+                self.users_mode[user.id] = self.tree.start_node
+
             keyboard = None
             if self.admin_menu(bot, chat_id, text, user, message_id) :
                 return "ADMIN_MENU"
@@ -57,10 +61,6 @@ class Telegram_menu_bot :
                 # self.tree.generate_photo("photo_tree.png")
                 self.send_menu(bot, chat_id, text, user)
                 return "MENU"
-
-            # new user
-            if user.id not in self.users_mode :
-                self.users_mode[user.id] = self.tree.start_node
 
             # return message
             if text in (RETURN_MENU_MESSAGE, RETURN_ONE_ASK) :
@@ -129,7 +129,7 @@ class Telegram_menu_bot :
             return "ERROR"
 
     def send_menu(self, bot, chat_id, text, user) :
-        ROWS = 100
+        ROWS = 70
         message_to_send = str(self.tree)
         list_to_send = message_to_send.split("\n")
         for i in range(0, int(len(list_to_send) / ROWS) + 1) :
