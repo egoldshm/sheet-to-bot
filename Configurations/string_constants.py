@@ -34,7 +34,7 @@ ADMIN_MENU = """*מה אתה בתור מנהל יכול לעשות?*
 TEXT_TO_CHANNEL_REPORT = """<b>הודעה מהבוט</b>
 <a href="tg://user?id={}"><u>משתמש 💬:</u></a>
 {}
-מספר הודעה 🔢:
+<u>מספר הודעה 🔢:</u>
 <code>{}</code>
 <u>הודעה 💬:</u>
 {}
