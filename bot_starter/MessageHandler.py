@@ -73,7 +73,7 @@ class Telegram_menu_bot :
                     keyboard = self.users_mode[user.id].keyboard
                 message = RETURN_MESSAGE
                 bot.IsendMessage(chat_id, message, keyboard=keyboard)
-                self.report(bot, self.users_mode[user.id], message, text, user)
+                self.report(bot, self.users_mode[user.id], message, text, user, message_id)
                 return "BACK"
 
             if self.users_mode[user.id].form :
@@ -88,7 +88,7 @@ class Telegram_menu_bot :
                         {}""".format(self.users_mode[user.id].name, user))
                         bot.Iforward_message(admin, chat_id, message_id)
                     bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM, keyboard=[[DONE_FORM_MESSAGE]])
-                self.report(bot, self.users_mode[user.id], "", text, user)
+                self.report(bot, self.users_mode[user.id], "", text, user, message_id)
                 return "FORM"
 
             current_node = self.users_mode[user.id]
@@ -146,7 +146,7 @@ class Telegram_menu_bot :
 
         self.report(bot, self.users_mode[user.id], "<התפריט נשלח>", text, user)
 
-    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User, message_id: int) :
+    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User, message_id=None) :
         report_to_channel(bot, message_to_report, text, user, str(current_node), message_id)
         self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report, message_id)
         self.registered_users.add_name(str(user.id))
@@ -212,7 +212,7 @@ class Telegram_menu_bot :
                                      "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count))
                 else :
                     self.messages_to_forward.append(message_id)
-                self.report(bot, "<מצב העברה>", "<ההודעה בהתאמה>", text, user)
+                self.report(bot, "<מצב העברה>", "<ההודעה בהתאמה>", text, user, message_id)
                 return True
 
             if text[0] == '{' and not self.users_mode[user.id].form :
@@ -274,11 +274,11 @@ class Telegram_menu_bot :
             else :
                 return False
             bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
-            self.report(bot, self.users_mode[user.id], message, text, user)
+            self.report(bot, self.users_mode[user.id], message, text, user, message_id)
             return True
 
         if text in ADMIN_MENU_COMMAND :
             bot.IsendMessage(chat_id, "אופס. אתה לא מנהל.")
-            self.report(bot, self.users_mode[user.id], "", text, user)
+            self.report(bot, self.users_mode[user.id], "", text, user, message_id)
             return True
         return False

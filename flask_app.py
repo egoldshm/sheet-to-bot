@@ -58,7 +58,7 @@ class flaskBot :
         keyboard = self.get_valid_keyboard(keyboard)
         inline_keyboard = list_of_lists_to_inline_keyboard(inline_keyboard)
         self.bot.sendMessage(chat_id, message, reply_markup=keyboard if keyboard else inline_keyboard,
-                             parse_mode='Markdown' if mark_down else None,
+                             parse_mode='Markdown' if mark_down else "None",
                              disable_web_page_preview=disable_web_preview)
 
     def IsendFile(self, chat_id, file_id, text=None, keyboard=None, mark_down=True, disable_web_preview=None,
