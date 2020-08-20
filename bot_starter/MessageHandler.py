@@ -16,7 +16,7 @@ from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
     DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL, \
-    ADMIN_MENU, ADMIN_MENU_COMMAND, RETURN_MESSAGE
+    ADMIN_MENU, ADMIN_MENU_COMMAND, RETURN_MESSAGE, TEXT_TO_CHANNEL_REPORT, ERROR_MESSAGE_TO_CHANNEL
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
@@ -26,16 +26,12 @@ from reporters.ReportFile import Report_to_file
 from reporters.save_unique_in_file import Save_unique_in_file
 
 
-def report_to_channel(bot, message, text, user, node) :
+def report_to_channel(bot, message, text=None, user=None, node=None) :
     try :
-        bot.IsendMessage(CHANNEL_ID, """משתמש:
-        {}
-        הודעה 💬:
-        {}
-        תשובה 🗨:
-        {}
-        צומת 🌴:
-        {}""".format(user, text, message, node), mark_down=False)
+        if not text:
+            bot.IsendMessage(CHANNEL_ID, message, mark_down=False)
+        else:
+            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user, text, message, node), mark_down=False)
     except :
         print("Not find channel")
 
@@ -57,7 +53,7 @@ class Telegram_menu_bot :
                 return "ADMIN_MENU"
 
             # return menu list
-            if text in MENU_LIST:
+            if text in MENU_LIST :
                 # self.tree.generate_photo("photo_tree.png")
                 self.send_menu(bot, chat_id, text, user)
                 return "MENU"
@@ -114,10 +110,10 @@ class Telegram_menu_bot :
                         keyboard = [[DONE_FORM_MESSAGE]]
                     self.users_mode[user.id] = new_node
 
-            elif text not in self.tree.botMenu.global_commands:
+            elif text not in self.tree.botMenu.global_commands :
                 self.users_mode[user.id] = self.tree.start_node
                 keyboard = self.tree.start_node.keyboard
-            else:
+            else :
                 keyboard = self.tree.botMenu.global_commands[text][1]
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
@@ -128,8 +124,8 @@ class Telegram_menu_bot :
         except Exception as ex :
             if user and isinstance(user, User.User) :
                 self.users_mode[user.id] = self.tree.start_node
-            print(bot, user, text)
             print("ERROR (in messageHandler): " + str(ex))
+            report_to_channel(bot, ERROR_MESSAGE_TO_CHANNEL.format(ex, user, text))
             return "ERROR"
 
     def send_menu(self, bot, chat_id, text, user) :
@@ -161,7 +157,7 @@ class Telegram_menu_bot :
             elif response.message_type == "sticker" :
                 file_id = response.data_id
                 bot.IsendSticker(chat_id, file_id, message)
-            elif response.message_type == "forward":
+            elif response.message_type == "forward" :
                 from_chat_id = response.data_id
                 bot.Iforward_message(chat_id, from_chat_id, message)
 
@@ -213,8 +209,9 @@ class Telegram_menu_bot :
                 message = json.dumps(text, indent=1)
                 mark_down = False
 
-            elif text in ADMIN_MENU_COMMAND:
-                message = ADMIN_MENU.format(SEND_MESSAGE_TO_ALL.strip(),FORWARD_TO_ALL, SEND_TO_USER.strip(), RESET_MESSAGE)
+            elif text in ADMIN_MENU_COMMAND :
+                message = ADMIN_MENU.format(SEND_MESSAGE_TO_ALL.strip(), FORWARD_TO_ALL, SEND_TO_USER.strip(),
+                                            RESET_MESSAGE)
 
             # reset the commands in the bot
             elif text == RESET_MESSAGE :
