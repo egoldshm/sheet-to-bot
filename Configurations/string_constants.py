@@ -33,6 +33,7 @@ ADMIN_MENU = """*מה אתה בתור מנהל יכול לעשות?*
 
 TEXT_TO_CHANNEL_REPORT = """משתמש:
 {}
+מספר הודעה 🔢: {}
 הודעה 💬:
 {}
 תשובה 🗨:

@@ -90,7 +90,6 @@ class flaskBot :
 
 
 telegram_menu_bot = Telegram_menu_bot()
-
 count = 0
 
 

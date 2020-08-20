@@ -26,12 +26,12 @@ from reporters.ReportFile import Report_to_file
 from reporters.save_unique_in_file import Save_unique_in_file
 
 
-def report_to_channel(bot, message, text=None, user=None, node=None) :
+def report_to_channel(bot, message, text=None, user=None, node=None, message_id=None) :
     try :
         if not text:
             bot.IsendMessage(CHANNEL_ID, message, mark_down=False)
         else:
-            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user, text, message, node), mark_down=False)
+            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user, message_id, text, message, node), mark_down=False)
     except :
         print("Not find channel")
 
@@ -118,7 +118,7 @@ class Telegram_menu_bot :
 
             message_to_report = self.send_response(bot, chat_id, responses, keyboard, user)
 
-            self.report(bot, current_node, message_to_report, text, user)
+            self.report(bot, current_node, message_to_report, text, user, message_id)
 
             return "Done"
         except Exception as ex :
@@ -146,9 +146,9 @@ class Telegram_menu_bot :
 
         self.report(bot, self.users_mode[user.id], "<התפריט נשלח>", text, user)
 
-    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User) :
-        report_to_channel(bot, message_to_report, text, user, str(current_node))
-        self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report)
+    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User, message_id: int) :
+        report_to_channel(bot, message_to_report, text, user, str(current_node), message_id)
+        self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report, message_id)
         self.registered_users.add_name(str(user.id))
 
     def send_response(self, bot, chat_id, responses: List[Response], keyboard=None, user=User.User()) :
