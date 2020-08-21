@@ -37,4 +37,5 @@ class Report_to_file:
         file = open(self.file_name, "r")
         for line in file.readlines():
             result.append(line.split(","))
+        result = list(filter(lambda i: len(i) > 3, result))
         return result
