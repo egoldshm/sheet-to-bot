@@ -235,7 +235,6 @@ class Telegram_menu_bot :
                     count += 1
 
             elif FREE_SEARCH_IN_DATA in text:
-                mark_down = False
                 text = text.replace(FREE_SEARCH_IN_DATA,"")
                 data = self.file_reporter.getAllFileData()
                 message = list(eval(text))
