@@ -231,7 +231,7 @@ class Telegram_menu_bot :
                     if data_about_user:
                         string = data_about_user[-1]
                     else: string = u_id
-                    message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(count, u_id, string)
+                    message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
 
             elif text in ADMIN_MENU_COMMAND :
