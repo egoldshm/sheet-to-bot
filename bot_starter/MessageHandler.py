@@ -238,7 +238,7 @@ class Telegram_menu_bot :
                 mark_down = False
                 text = text.replace(FREE_SEARCH_IN_DATA,"")
                 data = self.file_reporter.getAllFileData()
-                message = eval("list("+text+")")
+                message = eval(text)
                 message = "\n".join(message)
 
 
