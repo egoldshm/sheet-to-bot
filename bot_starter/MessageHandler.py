@@ -237,9 +237,12 @@ class Telegram_menu_bot :
             elif FREE_SEARCH_IN_DATA in text:
                 text = text.replace(FREE_SEARCH_IN_DATA,"")
                 data = self.file_reporter.getAllFileData()
-                message = eval(text)
-                if isinstance(message, list) and isinstance(message[0], list):
-                    message = "\n".join(map(lambda i: " ".join(map(str,i)), list(message)))
+                try:
+                    message = eval(text)
+                    if isinstance(message, list) and isinstance(message[0], list):
+                        message = "\n".join(map(lambda i: " ".join(map(str,i)), list(message)))
+                except Exception as ex:
+                    message = "ERROR:\n" + ex
 
 
 
