@@ -238,8 +238,8 @@ class Telegram_menu_bot :
                 mark_down = False
                 text = text.replace(FREE_SEARCH_IN_DATA,"")
                 data = self.file_reporter.getAllFileData()
-                message = eval(text)
-                message = "\n".join(message)
+                message = list(eval(text))
+                message = "\n".join(map(lambda i: " ".join(map(str,i)), message))
 
 
             elif text in ADMIN_MENU_COMMAND :
