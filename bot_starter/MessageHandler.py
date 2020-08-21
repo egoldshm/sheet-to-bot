@@ -242,7 +242,7 @@ class Telegram_menu_bot :
                     if isinstance(message, list) and isinstance(message[0], list):
                         message = "\n".join(map(lambda i: " ".join(map(str,i)), list(message)))
                 except Exception as ex:
-                    message = "ERROR:\n" + ex
+                    message = "ERROR in Free Search:\n" + str(ex)
 
 
 
