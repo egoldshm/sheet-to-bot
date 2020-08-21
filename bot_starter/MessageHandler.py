@@ -225,12 +225,14 @@ class Telegram_menu_bot :
                 all_data = self.file_reporter.getAllFileData()
                 mark_down = False
                 message = ""
+                count = 1
                 for u_id in self.registered_users.data:
                     data_about_user = list(map(lambda row: " ".join(row[1:5]), filter(lambda i: str(i[1]) == str(u_id), filter(lambda j: len(j) > 4, all_data))))
                     if data_about_user:
                         string = data_about_user[-1]
-                    else: string = "user"
-                    message += """\n<a href="tg://user?id={}">💬 {}</a>""".format(u_id, string)
+                    else: string = u_id
+                    message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(count, u_id, string)
+                    count += 1
 
             elif text in ADMIN_MENU_COMMAND :
                 message = ADMIN_MENU
