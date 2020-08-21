@@ -234,7 +234,7 @@ class Telegram_menu_bot :
                     message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
 
-            elif text in FREE_SEARCH_IN_DATA :
+            elif FREE_SEARCH_IN_DATA in text:
                 mark_down = False
                 text = text.replace(FREE_SEARCH_IN_DATA,"")
                 data = self.file_reporter.getAllFileData()
