@@ -36,5 +36,5 @@ class Report_to_file:
         result = []
         file = open(self.file_name, "r")
         for line in file.readlines():
-            result.append(list(map(lambda i: i.split(","), line)))
+            result.append(line.split(","))
         return result
