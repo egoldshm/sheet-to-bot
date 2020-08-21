@@ -223,11 +223,10 @@ class Telegram_menu_bot :
 
             elif text == ADMIN_GET_ALL_USERS:
                 all_data = self.file_reporter.getAllFileData()
-                print(all_data[0:100])
                 mark_down = False
                 message = ""
                 for u_id in self.registered_users.data:
-                    data_about_user = list(map(lambda row: " ".join(row[1:5]), filter(lambda i: str(i[1]) == str(u_id), all_data)))
+                    data_about_user = list(map(lambda row: " ".join(row[1:5]), filter(lambda i: str(i[1]) == str(u_id), filter(lambda j: len(j) > 4, all_data))))
                     if data_about_user:
                         string = data_about_user[-1]
                     else: string = "user"
