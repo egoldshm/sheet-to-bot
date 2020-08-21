@@ -226,7 +226,10 @@ class Telegram_menu_bot :
                 mark_down = False
                 message = ""
                 for u_id in self.registered_users.data:
-                    string = list(map(lambda row: " ".join(row[0:4]), filter(lambda i: i[0] == u_id, all_data)))[-1]
+                    data_about_user = list(map(lambda row: " ".join(row[0:4]), filter(lambda i: str(i[0]) == str(u_id), all_data)))
+                    if data_about_user:
+                        string = data_about_user[-1]
+                    else: string = "user"
                     message += """\n<a href="tg://user?id={}">💬 {}</a>""".format(u_id, string)
 
             elif text in ADMIN_MENU_COMMAND :
