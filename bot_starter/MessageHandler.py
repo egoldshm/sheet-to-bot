@@ -16,7 +16,8 @@ from Configurations.bot_token_conf import CHANNEL_ID
 from Configurations.reports_filename_conf import FILENAME_registered_users, FILENAME_report
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
     DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL, \
-    ADMIN_MENU, ADMIN_MENU_COMMAND, RETURN_MESSAGE, TEXT_TO_CHANNEL_REPORT, ERROR_MESSAGE_TO_CHANNEL
+    ADMIN_MENU, ADMIN_MENU_COMMAND, RETURN_MESSAGE, TEXT_TO_CHANNEL_REPORT, ERROR_MESSAGE_TO_CHANNEL, \
+    ADMIN_GET_ALL_USERS
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
@@ -212,7 +213,7 @@ class Telegram_menu_bot :
                                      "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count))
                 else :
                     self.messages_to_forward.append(message_id)
-                self.report(bot, "<מצב העברה>", "<ההודעה בהתאמה>", text, user, message_id)
+                self.report(bot, "מצב העברה", "ההודעה בהתאמה", text, user, message_id)
                 return True
 
             if text[0] == '{' and not self.users_mode[user.id].form :
@@ -220,9 +221,16 @@ class Telegram_menu_bot :
                 mark_down = False
                 message = "<code>{}</code>".format(message)
 
+            elif text == ADMIN_GET_ALL_USERS:
+                all_data = self.file_reporter.getAllFileData()
+                mark_down = False
+                message = ""
+                for u_id in self.registered_users.data:
+                    string = list(map(lambda row: " ".join(row[0:4]), filter(lambda i: i[0] == u_id, all_data)))[-1]
+                    message += """\n<a href="tg://user?id={}">💬 {}</a>""".format(u_id, string)
+
             elif text in ADMIN_MENU_COMMAND :
-                message = ADMIN_MENU.format(SEND_MESSAGE_TO_ALL.strip(), FORWARD_TO_ALL, SEND_TO_USER.strip(),
-                                            RESET_MESSAGE)
+                message = ADMIN_MENU
 
             # reset the commands in the bot
             elif text == RESET_MESSAGE :

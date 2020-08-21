@@ -31,3 +31,10 @@ class Report_to_file:
             file.close()
         except:
             print("problem with report in file")
+
+    def getAllFileData(self) -> List[List[str]]:
+        result = []
+        file = open(self.file_name, "r")
+        for line in file.readlines():
+            result.append(list(map(lambda i: i.split(","), line)))
+        return result
