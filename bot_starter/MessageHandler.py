@@ -223,6 +223,7 @@ class Telegram_menu_bot :
 
             elif text == ADMIN_GET_ALL_USERS:
                 all_data = self.file_reporter.getAllFileData()
+                print(all_data)
                 mark_down = False
                 message = ""
                 for u_id in self.registered_users.data:
