@@ -17,7 +17,7 @@ from Configurations.reports_filename_conf import FILENAME_registered_users, FILE
 from Configurations.string_constants import SEND_MESSAGE_TO_ALL, MENU_LIST, RESET_MESSAGE, SEND_TO_USER, \
     DONE_FORM_MESSAGE, RECEIVED_MESSAGE_FORM, FORWARD_TO_ALL, SEND_ONLY_TO_ME, CANCEL, RESPONSE_TO_FORWARD_TO_ALL, \
     ADMIN_MENU, ADMIN_MENU_COMMAND, RETURN_MESSAGE, TEXT_TO_CHANNEL_REPORT, ERROR_MESSAGE_TO_CHANNEL, \
-    ADMIN_GET_ALL_USERS
+    ADMIN_GET_ALL_USERS, FREE_SEARCH_IN_DATA
 from bot_starter import User
 from bot_starter.CommandNode import CommandNode
 from bot_starter.Response import Response
@@ -233,6 +233,14 @@ class Telegram_menu_bot :
                     else: string = u_id
                     message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
+
+            elif text in FREE_SEARCH_IN_DATA :
+                mark_down = False
+                text = text.replace(FREE_SEARCH_IN_DATA,"")
+                data = self.file_reporter.getAllFileData()
+                message = eval("list("+text+")")
+                message = "\n".join(message)
+
 
             elif text in ADMIN_MENU_COMMAND :
                 message = ADMIN_MENU
