@@ -8,7 +8,7 @@
 #                                                                #
 ##################################################################
 
-
+import inspect
 import json
 from typing import List, Dict
 
@@ -84,11 +84,11 @@ class Telegram_menu_bot :
                     bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard)
                 else :
                     for admin in self.tree.admins :
-                        bot.IsendMessage(admin, """*משוב עבור:* "{}"
-                        *מאת:*
-                        {}""".format(self.users_mode[user.id].name, user))
+                        bot.IsendMessage(admin, """<b>משוב עבור:</b> "{}"
+                        <b>מאת:</b> 
+                        {}""".format(self.users_mode[user.id].name, user), mark_down=False)
                         bot.Iforward_message(admin, chat_id, message_id)
-                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM, keyboard=[[DONE_FORM_MESSAGE]])
+                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM, keyboard=[[DONE_FORM_MESSAGE], [RETURN_MENU_MESSAGE]])
                 self.report(bot, self.users_mode[user.id], "", text, user, message_id)
                 return "FORM"
 
@@ -108,7 +108,7 @@ class Telegram_menu_bot :
                 keyboard = new_node.keyboard
                 if new_node.children or new_node.form :
                     if new_node.form :
-                        keyboard = [[DONE_FORM_MESSAGE]]
+                        keyboard = [[DONE_FORM_MESSAGE], [RETURN_MENU_MESSAGE]]
                     self.users_mode[user.id] = new_node
 
             elif text not in self.tree.botMenu.global_commands :
@@ -235,10 +235,13 @@ class Telegram_menu_bot :
                     count += 1
 
             elif FREE_SEARCH_IN_DATA in text:
+                mark_down = False
                 text = text.replace(FREE_SEARCH_IN_DATA,"")
                 data = self.file_reporter.getAllFileData()
                 try:
                     message = eval(text)
+                    if isinstance(message, str):
+                        pass
                     if isinstance(message, list) and isinstance(message[0], str):
                         message = "\n".join(map(str, message))
                     if isinstance(message, list) and isinstance(message[0], list):
