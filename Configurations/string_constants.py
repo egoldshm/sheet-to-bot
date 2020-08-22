@@ -23,7 +23,7 @@ SEND_ONLY_TO_ME = "שלח לי 😊"
 CANCEL = "ביטול ❌"
 RESPONSE_TO_FORWARD_TO_ALL = "אחלה, עכשיו שלח את ההודעות. ולסיום לחץ על 'שלח לי' או על 'שלח לכולם'"
 ADMIN_GET_ALL_USERS = "/allUsers"
-FREE_SEARCH_IN_DATA = "חיפוש חופשי:\n"
+FREE_SEARCH_IN_DATA = "חח:\n"
 
 ADMIN_MENU_COMMAND = ("/admin", "admin", "מנהלים", "תפריט ניהול")
 ADMIN_MENU = """*מה אתה בתור מנהל יכול לעשות?*
