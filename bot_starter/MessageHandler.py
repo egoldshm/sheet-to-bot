@@ -235,7 +235,7 @@ class Telegram_menu_bot :
                     message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
                     if count % 100 == 0 or i == len(self.registered_users.data) - 1:
-                        message = "<b> רשימת משתמשים בבוט 🤖 - מספר {} </b>".format(count // 100 + 1)
+                        message = "<b> רשימת משתמשים בבוט 🤖 - מספר {} </b>".format(count // 100 + 1) + "\n" + message
                         bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
                         message = ""
                 Message = None
