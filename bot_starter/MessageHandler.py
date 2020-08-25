@@ -234,10 +234,11 @@ class Telegram_menu_bot :
                     else: string = u_id
                     message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
-                    if i % 100 == 0 or i == len(self.registered_users.data) - 1:
+                    if count % 100 == 0 or i == len(self.registered_users.data) - 1:
+                        message = "<b> רשימת משתמשים בבוט 🤖 - מספר {} </b>".format(count // 100 + 1)
                         bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
                         message = ""
-                return True
+                Message = None
 
 
             elif FREE_SEARCH_IN_DATA in text:
@@ -310,7 +311,8 @@ class Telegram_menu_bot :
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
                 return False
-            bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
+            if message:
+                bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user, message_id)
             return True
 
