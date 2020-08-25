@@ -226,13 +226,19 @@ class Telegram_menu_bot :
                 mark_down = False
                 message = ""
                 count = 1
-                for u_id in self.registered_users.data:
+                for i in range(len(self.registered_users.data)):
+                    u_id = self.registered_users.data[i]
                     data_about_user = list(map(lambda row: " ".join(row[1:5]), filter(lambda i: str(i[1]) == str(u_id), filter(lambda j: len(j) > 4, all_data))))
                     if data_about_user:
                         string = data_about_user[-1]
                     else: string = u_id
                     message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
+                    if i % 100 == 0 or i == len(self.registered_users.data) - 1:
+                        bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
+                        message = ""
+                return True
+
 
             elif FREE_SEARCH_IN_DATA in text:
                 mark_down = False
