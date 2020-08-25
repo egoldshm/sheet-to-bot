@@ -57,7 +57,7 @@ def create_response(res: Dict) -> Response :
                 for item in list_of_items :
                     text = item.split("-")[0].strip()
                     # todo: add check to format and url
-                    url = item.split("-")[1].strip()
+                    url = "-".join(item.split("-")[1:]).strip()
                     result_for_line.append((text, url))
                 result_inline_keyboard.append(result_for_line)
             r.inline_keyboard = result_inline_keyboard
