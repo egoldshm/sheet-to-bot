@@ -7,7 +7,7 @@
 #    #      השימוש ללא אישור אסור לפי ההלכה ולפי הרישיון והחוק הבינלאומי
 #                                                                #
 ##################################################################
-
+import ast
 import inspect
 import json
 from typing import List, Dict
@@ -217,9 +217,22 @@ class Telegram_menu_bot :
                 return True
 
             if text[0] == '{' and not self.users_mode[user.id].form :
-                message = json.dumps(text, indent=3)
+                message = ""
+                text_dict = ast.literal_eval(text)
+                try:
+                    if "message" in text_dict :
+                        message_d = text_dict["message"]
+                        if "document" in message_d :
+                            message = message_d["document"]["file_id"]
+                            message = "<code>{}</code>".format(message)
+                        elif "photo" in message_d :
+                            for image in message_d["photo"] :
+                                message += "<code>{}</code>\n".format(image["file_id"])
+                        else :
+                            message = "<code>{}</code>".format(message_id)
+                except:
+                    message = json.dumps(text, indent=3)
                 mark_down = False
-                message = "<code>{}</code>".format(message)
 
             elif text == ADMIN_GET_ALL_USERS:
                 all_data = self.file_reporter.getAllFileData()

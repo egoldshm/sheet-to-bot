@@ -126,6 +126,7 @@ def answer():
     except :
         print(update)
         text = str(update)
+
     if user :
         user = User(user["id"], user.get("first_name"), user.get("last_name"), user.get("user_name"))
         return telegram_menu_bot.messageHandler(chat_id, mybot, user, text, message_id=message_id)
