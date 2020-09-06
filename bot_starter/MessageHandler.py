@@ -223,7 +223,7 @@ class Telegram_menu_bot :
                         message_d = text_dict["message"]
                         if "document" in message_d :
                             message = message_d["document"]["file_id"]
-                            message = "<b> file <b>\n<code>{}</code>".format(message)
+                            message = "<b> file </b>\n<code>{}</code>".format(message)
                         elif "photo" in message_d :
                             message = ""
                             list_of_photos = []
@@ -231,7 +231,7 @@ class Telegram_menu_bot :
                                 image_id = image["file_id"]
                                 if image_id not in list_of_photos:
                                     list_of_photos.append(image_id)
-                                    message += "<b> photo <b>\n <code>{}</code>\n".format(image_id)
+                                    message += "<b> photo </b>\n <code>{}</code>\n".format(image_id)
                         else :
                             message = "<b> forward </b>\n <code>{}</code>".format(str(chat_id) + " " + str(message_id))
                 except:
