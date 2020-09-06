@@ -217,19 +217,23 @@ class Telegram_menu_bot :
                 return True
 
             if text[0] == '{' and not self.users_mode[user.id].form :
-                message = ""
                 text_dict = ast.literal_eval(text)
                 try:
                     if "message" in text_dict :
                         message_d = text_dict["message"]
                         if "document" in message_d :
                             message = message_d["document"]["file_id"]
-                            message = "<code>{}</code>".format(message)
+                            message = "<b> file <b>\n<code>{}</code>".format(message)
                         elif "photo" in message_d :
+                            message = ""
+                            list_of_photos = []
                             for image in message_d["photo"] :
-                                message += "<code>{}</code>\n".format(image["file_id"])
+                                image_id = image["file_id"]
+                                if image_id not in list_of_photos:
+                                    list_of_photos.append(image_id)
+                                    message += "<b> photo <b>\n <code>{}</code>\n".format(image_id)
                         else :
-                            message = "<code>{}</code>".format(message_id)
+                            message = "<b> forward </b>\n <code>{}</code>".format(str(chat_id) + " " + str(message_id))
                 except:
                     message = json.dumps(text, indent=3)
                 mark_down = False

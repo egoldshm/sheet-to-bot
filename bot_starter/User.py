@@ -28,7 +28,7 @@ class User:
 
     def __str__(self):
         return """#id{}
-        מספר זיהוי:<code>{}</code>
+        מספר זיהוי: <code>{}</code>
         שם פרטי: {}
         שם משפחה: {}
         שם משתמש: {}""".format(self.id, self.id, self.f_name, self.l_name, self.username)
