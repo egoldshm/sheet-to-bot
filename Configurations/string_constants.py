@@ -35,13 +35,12 @@ ADMIN_MENU = """*מה אתה בתור מנהל יכול לעשות?*
 6. *לקבל רשימה מלאה של המשתמשים שבבוט* - תכתוב {}""".format(SEND_MESSAGE_TO_ALL.strip(), FORWARD_TO_ALL, SEND_TO_USER.strip(),
                                             RESET_MESSAGE,ADMIN_GET_ALL_USERS)
 
-TEXT_TO_CHANNEL_REPORT = """<b>הודעה מהבוט</b>
-<a href="tg://user?id={}"><u>משתמש 💬:</u></a>
+TEXT_TO_CHANNEL_REPORT = """<a href="tg://user?id={}"><u>משתמש 💬:</u></a>
 {}
 <u>מספר הודעה 🔢:</u>
 <code>{}</code>
 <u>הודעה 💬:</u>
-{}
+<b>{}</b>
 <u>תשובה 🗨:</u>
 {}
 <u>צומת 🌴:</u>
