@@ -143,7 +143,7 @@ class Telegram_menu_bot :
                 list_to_send.append("-" + response.text)
 
         for i in range(0, int(len(list_to_send) / ROWS) + 1) :
-            bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]))
+            bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]),mark_down=False)
 
         self.report(bot, self.users_mode[user.id], "<התפריט נשלח>", text, user)
 
