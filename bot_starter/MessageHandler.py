@@ -29,10 +29,11 @@ from reporters.save_unique_in_file import Save_unique_in_file
 
 def report_to_channel(bot, message, text=None, user=None, node=None, message_id=None) :
     try :
-        if not text:
+        if not text :
             bot.IsendMessage(CHANNEL_ID, message, mark_down=False)
-        else:
-            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user.id, user, message_id, text, message, node), mark_down=False)
+        else :
+            bot.IsendMessage(CHANNEL_ID, TEXT_TO_CHANNEL_REPORT.format(user.id, user, message_id, text, message, node),
+                             mark_down=False)
     except :
         print("Not find channel")
 
@@ -88,7 +89,8 @@ class Telegram_menu_bot :
                         <b>מאת:</b> 
                         {}""".format(self.users_mode[user.id].name, user), mark_down=False)
                         bot.Iforward_message(admin, chat_id, message_id)
-                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM, keyboard=[[DONE_FORM_MESSAGE], [RETURN_MENU_MESSAGE]])
+                    bot.IsendMessage(chat_id, RECEIVED_MESSAGE_FORM,
+                                     keyboard=[[DONE_FORM_MESSAGE], [RETURN_MENU_MESSAGE]])
                 self.report(bot, self.users_mode[user.id], "", text, user, message_id)
                 return "FORM"
 
@@ -137,19 +139,22 @@ class Telegram_menu_bot :
             bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]))
 
         list_to_send = ["<b>פקודות גלובליות:</b>"]
-        for key, value in self.tree.botMenu.global_commands.items():
+        for key, value in self.tree.botMenu.global_commands.items() :
             list_to_send.append("<u>{}:</u>".format(key))
-            for response in value[0]:
+            for response in value[0] :
                 list_to_send.append("-" + response.text)
 
         for i in range(0, int(len(list_to_send) / ROWS) + 1) :
-            bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]),mark_down=False)
+            bot.IsendMessage(chat_id, "\n".join(list_to_send[i * ROWS :min((i + 1) * ROWS, len(list_to_send))]),
+                             mark_down=False)
 
         self.report(bot, self.users_mode[user.id], "--התפריט נשלח--", text, user)
 
-    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User, message_id=None) :
+    def report(self, bot, current_node: CommandNode, message_to_report: str, text: str, user: User.User,
+               message_id=None) :
         report_to_channel(bot, message_to_report, text, user, str(current_node), message_id)
-        self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report, message_id)
+        self.file_reporter.addLine(user.id, user.f_name, user.l_name, user.username, text, message_to_report,
+                                   message_id)
         self.registered_users.add_name(str(user.id))
 
     def send_response(self, bot, chat_id, responses: List[Response], keyboard=None, user=User.User()) :
@@ -185,13 +190,7 @@ class Telegram_menu_bot :
             mark_down = True
 
             # forward message to all
-            if FORWARD_TO_ALL == text :
-                self.users_mode[user.id] = FORWARD_TO_ALL
-                self.messages_to_forward = []
-                bot.IsendMessage(chat_id, RESPONSE_TO_FORWARD_TO_ALL,
-                                 keyboard=[[FORWARD_TO_ALL], [SEND_ONLY_TO_ME], [CANCEL]])
-                return True
-            elif self.users_mode[user.id] == FORWARD_TO_ALL :
+            if self.users_mode[user.id] == FORWARD_TO_ALL :
                 if text == SEND_ONLY_TO_ME :
                     for i in self.messages_to_forward :
                         bot.Iforward_message(chat_id, chat_id, i)
@@ -211,14 +210,21 @@ class Telegram_menu_bot :
                     self.users_mode[user.id] = self.tree.start_node
                     bot.IsendMessage(chat_id,
                                      "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count))
+
                 else :
                     self.messages_to_forward.append(message_id)
                 self.report(bot, "מצב העברה", "ההודעה בהתאמה", text, user, message_id)
                 return True
+            elif FORWARD_TO_ALL == text :
+                self.users_mode[user.id] = FORWARD_TO_ALL
+                self.messages_to_forward = []
+                bot.IsendMessage(chat_id, RESPONSE_TO_FORWARD_TO_ALL,
+                                 keyboard=[[FORWARD_TO_ALL], [SEND_ONLY_TO_ME], [CANCEL]])
+                return True
 
             if text[0] == '{' and not self.users_mode[user.id].form :
                 text_dict = ast.literal_eval(text)
-                try:
+                try :
                     if "message" in text_dict :
                         message_d = text_dict["message"]
                         if "document" in message_d :
@@ -229,48 +235,51 @@ class Telegram_menu_bot :
                             list_of_photos = []
                             for image in message_d["photo"] :
                                 image_id = image["file_id"]
-                                if image_id not in list_of_photos:
+                                if image_id not in list_of_photos :
                                     list_of_photos.append(image_id)
                                     message += "<b> photo </b>\n <code>{}</code>\n".format(image_id)
                         else :
                             message = "<b> forward </b>\n <code>{}</code>".format(str(chat_id) + " " + str(message_id))
-                except:
+                except :
                     message = json.dumps(text, indent=3)
                 mark_down = False
 
-            elif text == ADMIN_GET_ALL_USERS:
+            elif text == ADMIN_GET_ALL_USERS :
                 all_data = self.file_reporter.getAllFileData()
                 mark_down = False
                 message = ""
                 count = 1
-                for i in range(len(self.registered_users.data)):
+                for i in range(len(self.registered_users.data)) :
                     u_id = self.registered_users.data[i]
-                    data_about_user = list(map(lambda row: " ".join(row[1:5]), filter(lambda i: str(i[1]) == str(u_id), filter(lambda j: len(j) > 4, all_data))))
-                    if data_about_user:
+                    data_about_user = list(map(lambda row : " ".join(row[1 :5]),
+                                               filter(lambda i : str(i[1]) == str(u_id),
+                                                      filter(lambda j : len(j) > 4, all_data))))
+                    if data_about_user :
                         string = data_about_user[-1]
-                    else: string = u_id
+                    else :
+                        string = u_id
                     message += """\n<a href="tg://user?id={}">{}. {}</a>""".format(u_id, count, string)
                     count += 1
-                    if count % 100 == 0 or i == len(self.registered_users.data) - 1:
+                    if count % 100 == 0 or i == len(self.registered_users.data) - 1 :
                         message = "<b> רשימת משתמשים בבוט 🤖 - מספר {} </b>".format(i // 100 + 1) + "\n" + message
                         bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
                         message = ""
                 Message = None
 
 
-            elif FREE_SEARCH_IN_DATA in text:
+            elif FREE_SEARCH_IN_DATA in text :
                 mark_down = False
-                text = text.replace(FREE_SEARCH_IN_DATA,"")
+                text = text.replace(FREE_SEARCH_IN_DATA, "")
                 data = self.file_reporter.getAllFileData()
-                try:
+                try :
                     message = eval(text)
-                    if isinstance(message, str):
+                    if isinstance(message, str) :
                         pass
-                    if isinstance(message, list) and isinstance(message[0], str):
+                    if isinstance(message, list) and isinstance(message[0], str) :
                         message = "\n".join(map(str, message))
-                    if isinstance(message, list) and isinstance(message[0], list):
-                        message = "\n".join(map(lambda i: " ".join(map(str,i)), list(message)))
-                except Exception as ex:
+                    if isinstance(message, list) and isinstance(message[0], list) :
+                        message = "\n".join(map(lambda i : " ".join(map(str, i)), list(message)))
+                except Exception as ex :
                     message = "ERROR in Free Search:\n" + str(ex)
 
 
@@ -328,7 +337,7 @@ class Telegram_menu_bot :
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
                 return False
-            if message:
+            if message :
                 bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user, message_id)
             return True
