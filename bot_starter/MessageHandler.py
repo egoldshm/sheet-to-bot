@@ -209,7 +209,7 @@ class Telegram_menu_bot :
                             pass
                     self.users_mode[user.id] = self.tree.start_node
                     bot.IsendMessage(chat_id,
-                                     "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count))
+                                     "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count), keyboard=self.tree.start_node.keyboard)
 
                 else :
                     self.messages_to_forward.append(message_id)
