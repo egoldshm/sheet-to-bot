@@ -205,11 +205,13 @@ class Telegram_menu_bot :
                             for i in self.messages_to_forward :
                                 bot.Iforward_message(user_id, chat_id, i)
                             count += 1
-                        except :
-                            pass
+                        except Exception as exp :
+                            report_to_channel(bot, ERROR_MESSAGE_TO_CHANNEL.format(exp, user, text))
+
                     self.users_mode[user.id] = self.tree.start_node
                     bot.IsendMessage(chat_id,
-                                     "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count), keyboard=self.tree.start_node.keyboard)
+                                     "הועברו בהצלחה {} הודעות ל{} משתמשים".format(len(self.messages_to_forward), count),
+                                     keyboard=self.tree.start_node.keyboard)
 
                 else :
                     self.messages_to_forward.append(message_id)
@@ -303,6 +305,7 @@ class Telegram_menu_bot :
                 if text_to_send in self.tree.botMenu.global_commands :
                     responses = self.tree.botMenu.global_commands[text_to_send]
 
+                message = ""
                 count = 0
                 for user_id in self.registered_users.data :
                     try :
@@ -311,9 +314,10 @@ class Telegram_menu_bot :
                         else :
                             bot.IsendMessage(user_id, text_to_send)
                         count += 1
-                    except :
-                        pass
-                message = "ההודעה נשלחה בהצלחה ל{} משתמשים".format(count)
+                    except Exception as exp:
+                        report_to_channel(bot, ERROR_MESSAGE_TO_CHANNEL.format(exp, user, text))
+                        message += "לא הצלחתי לשלוח ל-{}".format(user_id)
+                message += "ההודעה נשלחה בהצלחה ל{} משתמשים".format(count)
 
             #  send private massage
             elif SEND_TO_USER in text :
@@ -333,11 +337,12 @@ class Telegram_menu_bot :
                     else :
                         bot.IsendMessage(user_id, text_to_send)
                     message = "ההודעה נשלחה בהצלחה ל{}".format(user_id)
-                except :
+                except Exception as exp:
+                    report_to_channel(bot, ERROR_MESSAGE_TO_CHANNEL.format(exp, user, text))
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
                 return False
-            if message :
+            if message:
                 bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user, message_id)
             return True
