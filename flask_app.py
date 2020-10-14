@@ -122,7 +122,7 @@ def answer():
 
         chat = message["chat"]
         chat_id = chat["id"]
-        chat_type = chat["group"]
+        chat_type = chat["type"]
         user = message["from"]
 
         message_id = message["message_id"]
