@@ -49,10 +49,10 @@ class Telegram_menu_bot :
         self.file_reporter = Report_to_file(FILENAME_report)
 
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None, chat_type=None) -> str :
-        try:
-            if chat_type == "group":
+        try :
+            if chat_type == "group" :
                 message = self.tree.botMenu.get_responses_for_contacts(text)
-                if message:
+                if message :
                     bot.IsendMessage(chat_id, message)
                 self.report(bot, None, message, text, user, message_id)
                 return "Group"
@@ -167,7 +167,7 @@ class Telegram_menu_bot :
     def send_response(self, bot, chat_id, responses: List[Response], keyboard=None, user=User.User()) :
         message_to_report = ""
         for response in responses :
-            message = response.text
+            message = str(response.text)
             message = user.replace_in_message(message)
             if response.message_type == "photo" :
                 photo_id = response.data_id
@@ -321,7 +321,7 @@ class Telegram_menu_bot :
                         else :
                             bot.IsendMessage(user_id, text_to_send)
                         count += 1
-                    except Exception as exp:
+                    except Exception as exp :
                         report_to_channel(bot, ERROR_MESSAGE_TO_CHANNEL.format(exp, user, text))
                         message += "לא הצלחתי לשלוח ל-{}".format(user_id)
                 message += "ההודעה נשלחה בהצלחה ל{} משתמשים".format(count)
@@ -344,12 +344,12 @@ class Telegram_menu_bot :
                     else :
                         bot.IsendMessage(user_id, text_to_send)
                     message = "ההודעה נשלחה בהצלחה ל{}".format(user_id)
-                except Exception as exp:
+                except Exception as exp :
                     report_to_channel(bot, ERROR_MESSAGE_TO_CHANNEL.format(exp, user, text))
                     message = "לא הצלחתי לשלוח הודעה ל{}".format(user_id)
             else :
                 return False
-            if message:
+            if message :
                 bot.IsendMessage(chat_id, message, keyboard=self.tree.start_node.keyboard, mark_down=mark_down)
             self.report(bot, self.users_mode[user.id], message, text, user, message_id)
             return True

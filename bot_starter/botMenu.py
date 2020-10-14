@@ -108,6 +108,8 @@ class BotMenu :
             map(lambda com : (com["name"], com["answer"]), filter(lambda i : i["is_contact"] == 'TRUE', self.commands)))
 
     def responses_to_command(self, text: str, node: CommandNode) -> List[Response] :
+        response_as_result: str
+
         if text in node :
             return node[text].responses
 
@@ -119,7 +121,7 @@ class BotMenu :
         response_as_result = self.get_responses_for_contacts(text)
 
         if not response_as_result:
-            response_as_result = [Response(COMMAND_NOT_FOUND_MESSAGE)]
+            return [Response(COMMAND_NOT_FOUND_MESSAGE)]
         return [Response(response_as_result)]
 
     def menu_return(self, menu_name) -> Optional[str] :
