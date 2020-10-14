@@ -54,6 +54,7 @@ class Telegram_menu_bot :
                 message = self.tree.botMenu.get_responses_for_contacts(text)
                 if message:
                     bot.IsendMessage(chat_id, message)
+                self.report(bot, None, message, text, user, message_id)
                 return "Group"
 
             # new user
