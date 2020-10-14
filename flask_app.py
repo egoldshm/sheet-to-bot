@@ -106,7 +106,7 @@ def answer():
     mybot = flaskBot(bot)
     count = count + 1
     update = request.get_json()
-
+    chat_type = "private"
     try :
         if "message" not in update :
             print("problem with 'message'")
