@@ -122,6 +122,7 @@ def answer():
 
         chat = message["chat"]
         chat_id = chat["id"]
+        chat_type = chat["group"]
         user = message["from"]
 
         message_id = message["message_id"]
@@ -133,5 +134,5 @@ def answer():
 
     if user :
         user = User(user["id"], user.get("first_name"), user.get("last_name"), user.get("user_name"))
-        return telegram_menu_bot.messageHandler(chat_id, mybot, user, text, message_id=message_id)
+        return telegram_menu_bot.messageHandler(chat_id, mybot, user, text, message_id=message_id, chat_type=chat_type)
     return "ERROR"

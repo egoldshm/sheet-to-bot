@@ -48,8 +48,14 @@ class Telegram_menu_bot :
         self.registered_users = Save_unique_in_file(FILENAME_registered_users)
         self.file_reporter = Report_to_file(FILENAME_report)
 
-    def messageHandler(self, chat_id, bot, user: User, text, message_id=None) -> str :
-        try :
+    def messageHandler(self, chat_id, bot, user: User, text, message_id=None, chat_type=None) -> str :
+        try:
+            if chat_type == "group":
+                message = self.tree.botMenu.get_responses_for_contacts(text)
+                if message:
+                    bot.IsendMessage(chat_id, message)
+                return "Group"
+
             # new user
             if user.id not in self.users_mode :
                 self.users_mode[user.id] = self.tree.start_node

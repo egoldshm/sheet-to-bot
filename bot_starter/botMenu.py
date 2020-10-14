@@ -116,26 +116,11 @@ class BotMenu :
             return self.global_commands[text][0]
 
         # contacts -> text only:
-        result = []
-        for input_message, response in self.contacts :
-            if input_message == text :
-                return [Response(response)]
-            else :
-                list_of_spilt = input_message.strip().split(" ")
-                for j in list_of_spilt :
-                    if j in text.split(" ") and len(j) > 1 and j not in IGNORE_WORDS :
-                        if input_message in text :
-                            return [Response(response)]
-                        else :
-                            if response not in result :
-                                result.append(response)
+        response_as_result = self.get_responses_for_contacts(text)
 
-        if result :
-            return [Response(
-                WHAT_WE_FOUND_MESSAGE + LIST_OF_ITEMS_FOUND_SIGN + "\n{} ".format(LIST_OF_ITEMS_FOUND_SIGN).join(
-                    result))]
-
-        return [Response(COMMAND_NOT_FOUND_MESSAGE)]
+        if not response_as_result:
+            response_as_result = [Response(COMMAND_NOT_FOUND_MESSAGE)]
+        return [Response(response_as_result)]
 
     def menu_return(self, menu_name) -> Optional[str] :
         fathers = list(filter(lambda i : i["name"] == menu_name, self.commands))
@@ -143,6 +128,25 @@ class BotMenu :
             return None
         father_menu = fathers[0]["father_menu"]
         return father_menu
+
+    def get_responses_for_contacts(self, text) -> str:
+        result = []
+        for input_message, response in self.contacts :
+            if input_message == text :
+                return response
+            else :
+                list_of_spilt = input_message.strip().split(" ")
+                for j in list_of_spilt :
+                    if j in text.split(" ") and len(j) > 1 and j not in IGNORE_WORDS :
+                        if input_message in text :
+                            return response
+                        else :
+                            if response not in result:
+                                result.append(response)
+        if result:
+            return WHAT_WE_FOUND_MESSAGE + LIST_OF_ITEMS_FOUND_SIGN + "\n{} ".format(LIST_OF_ITEMS_FOUND_SIGN).join(
+                    result)
+
 
     def menu_by_father(self, father_name="/start"):
 
