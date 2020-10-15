@@ -50,9 +50,10 @@ class Telegram_menu_bot :
 
     def messageHandler(self, chat_id, bot, user: User, text, message_id=None, chat_type=None) -> str :
         try :
-            if chat_type == "group" :
+            if "group" in chat_type :
                 message = self.tree.botMenu.get_responses_for_contacts(text)
-                if message :
+                if message and "מספר של" in text:
+                    message += "\n\n*מוזמן לנסות אותי בפעם הבאה בפרטי - שם יש לי גם הרבה יותר אפשרויות 🤩🤘*"
                     bot.IsendMessage(chat_id, message)
                 self.report(bot, None, message, text, user, message_id)
                 return "Group"
