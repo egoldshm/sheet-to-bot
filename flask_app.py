@@ -15,13 +15,13 @@ import urllib3
 from flask import Flask, request
 from telepot.namedtuple import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 
-from Configurations.bot_token_conf import TOKEN
+from Configurations.bot_token_conf import TOKEN, SECRET
 from Configurations.pythonanywhere_conf import PYTHONANYWHERE_NAME
 from bot_starter.MessageHandler import Telegram_menu_bot
 from bot_starter.User import User
 MAX_MESSAGE_SIZE = 4095
 
-secret = "7bd8040d-baff-41c2-b16f-cdffb6e168f0"
+secret = SECRET
 
 proxy_url = "http://proxy.server:3128"
 telepot.api._pools = {
