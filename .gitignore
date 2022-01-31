@@ -3,3 +3,4 @@ venv
 staticfiles
 .env
 db.sqlite3
+Configurations/bot_token_conf.py
