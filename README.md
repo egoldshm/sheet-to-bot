@@ -12,11 +12,11 @@ Feel free to be impressed and use these two bots:
 
 You can use this code by these steps:
 1. Create a [Google Sheets](https://www.google.com/sheets/about/) file that will contain the contents of the buttons in this column format:
- - Button name
- - button type (from the list: text, file, or button)
- - the command that will contain this command as the menu (can be left blank so that this command will not be in the menu)
- - place in row
- - place in column
+   - Button name
+   - button type (from the list: text, file, or button)
+   - the command that will contain this command as the menu (can be left blank so that this command will not be in the menu)
+   - place in row
+   - place in column
 2. Deploy this project in pythonanywhere or heroku or every host for python webhook
 
 # Need help?
